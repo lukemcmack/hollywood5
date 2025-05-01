@@ -1,67 +1,88 @@
 <h1 align="center">Hollywood 5 (potentially CineClassifiers or Film Forecasters or Red Carpet Recommenders? eh? eh? get it?)</h1>
 <h2 align="center">By Orlando Di Leo, Matias Ibarburu, Luke McDonald, Daniel Urrutia, Jisoo Yoo</h2>
 <p align="center"> <img src="https://hips.hearstapps.com/hmg-prod/images/overview-of-the-oscar-statue-at-meet-the-oscars-at-the-time-news-photo-1588178852.jpg" alt="An image of an Oscar trophy." width="500"> </p>
-<h2 align="center">Project Description</h2>
+<h2 align="center">🎬 Project Description</h2>
+
 <p align="justify">
-The goal of our project is to predict whether an Oscar-nominated film will win its category based on audience sentiment. To do this, we use (NLP? or other) techniques on Letterboxd reviews to extract any meaningful patterns from how people talk about each film. Our hypothesis is that certain language cues and emotional signals - combined with metadata like review amount, average rating, and director identity - can help us distinguish likely winners from other nominees.
+Our goal is to build a model that predicts whether an Oscar-nominated film will win its category, based on audience sentiment and engagement. We use natural language processing (NLP) on Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement—combined with basic film metadata—can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
 </p>
 
-<h2 align="center">The Data</h2>
+---
 
-<h3 align="left">Sources</h3>
-<ul>
-  <li><b>Oscar Award Data:</b> Manually compiled from the official Oscars website, including award categories, nominated films, credited individuals, and winners from 2012 to 2025: https://www.oscars.org/oscars/ceremonies/ (LUKE McDONALD + DANIEL URRUTIA).</li>
-  <li><b>Letterboxd Reviews:</b> User reviews and metadata (e.g., star rating, number of likes) scraped from Letterboxd using a custom-built crawler (LUKE McDONALD).</li>
-</ul>
+<h2 align="center">🗂️ The Data</h2>
 
-<h3 align="left">Features</h3>
+<h3>Sources</h3>
+
+- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2012–2025), including award categories, nominee and winner names, and credited producers.  
+  <i>(Data collection by Luke McDonald and Daniel Urrutia)</i>  
+- **Letterboxd Reviews**: Scraped using a custom crawler, gathering user-written reviews, timestamps, star ratings, likes, and comment counts for each nominated film.  
+  <i>(Scraping by Luke McDonald)</i>
+
+---
+<h3>Features</h3>
 <ul>
-  <li>Review text</li>
-  <li>Sentiment wording scores</li>
-  <li>Average star rating, total number of reviews, and engagement (likes, comments)</li>
-  <li>Binary outcome variable indicating Oscar win (1) or not (0)</li>
+  <li>Preprocessed review text (for NLP analysis)</li>
+  <li>Average star rating and number of reviews</li>
+  <li>Engagement metrics (likes, comments)</li>
+  <li>Director, editor, producer(s), and studio (as categorical features)</li>
+  <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
 
 
 <h3 align="left">Collection Methodology</h3>
+
 <p>
-We collected Letterboxd reviews for nominated films, filtering to include only reviews posted before the official Oscar award announcements. This allows our model to simulate a true prediction setting, using only information available prior to the results. Reviews were gathered across multiple years, with metadata including timestamps, review text, star ratings, and engagement metrics.
+We scraped Letterboxd reviews for each nominated film, filtering to include only reviews posted before the Oscar ceremony of that year. This simulates a true prediction setting based on pre-award public sentiment. We also manually compiled film-level metadata such as director, editor, producers, and production studio from official Oscar pages and IMDb. These categorical variables give us additional context about the film’s pedigree—information we suspect might carry predictive weight alongside audience reception.
 </p>
 
-<h3 align="left">Limitations</h3>
-<ul>
-    <li>There may be bias in review behavior following the nominee announcements, as users may revise opinions or engage more with nominated films. While we excluded reviews posted after the award announcements, some noise could still be introduced during the nominee-to-winner period. Additionally, Letterboxd audiences may not be representative of Academy voters, and review volume can vary widely across films and years.</li>
-    <li>Letterboxd reviews may be biased toward younger audiences, given that the app is relatively new, which may not reflect Academy voting trends.</li>
-    <li>Some nominated films have relatively few reviews, which can affect model consistency.</li>
-    <li>Review text may mention spoilers, sarcasm, jokes, or double negatives that introduce noise into features that will be used to predict classification (models used?).</li>
-</ul>
+<h3>Limitations</h3>
 
-<h2 align="center">The Model(s)</h2>
+- Audience behavior may shift after nominations are announced, even before winners are revealed—introducing possible bias despite our review cutoff.
+- Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
+- Review volume varies across films, especially in smaller or foreign-language categories.
+- NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
+- Not all nominee categories are equally represented in the data (e.g. Short Films vs. Best Picture).
 
-<p>
-Our approach classifies whether a nominated film won its Oscar category. We preprocess the Letterboxd review text features and feed this into a classifier. Then, the model learns patterns in the language and review engagement surrounding films to predict Oscar outcomes.
-<p>
-We plan to experiment with other models (models used?) for both text features and non-text data (e.g., star ratings, review counts, genre tags).
-</p>
+---
 
-<h2 align="center">Results and Recommendations</h2>
+<h2 align="center">🧠 The Model(s)</h2>
 
-<p>
-So far, our model shows (describe) results in distinguishing between Oscar winners and non-winners using Letterboxd reviews. While exact performance metrics are still in development, initial classification accuracy and precision suggest that online audience response captures meaningful signals about industry outcomes.
-</p>
+We use a classification approach to predict whether a nominated film won its Oscar. Initially, we apply NLP techniques to the review text and use classifiers such as a multilayer perceptron (MLP). The model learns patterns in both the language and numerical features of engagement.
 
-<p>
-We recommend future iterations explore ensemble models combining linguistic, numeric, and historical award trend features. Expanding the dataset across more years may also improve generalizability.
-</p>
+Future extensions will include experiments with:
+- TF-IDF vs. word embeddings
+- Ensemble models (e.g. combining numeric + text pipelines)
+- Incorporating prior nomination history or director recognition
 
-<h2 align="center">Reproducing the Results</h2>
-<p>
-To reproduce our results, clone this repository and install the required dependencies listed in <code>requirements.txt</code>. Then, run the pipeline scripts, starting with data collection and processing and ending with model training and evaluation.
-</p>
+---
 
+<h2 align="center">📊 Results and Recommendations</h2>
 
-<h3 align="left">Sources</h3>
-<ul>
-  <li><b>Oscar Nominee and Winner Data:</b> Manually compiled from the official <a href="https://www.oscars.org/">Academy Awards</a> website for years 2012–2025.</li>
-  <li><b>Letterboxd Review Data:</b> Scraped using custom scripts built by the team, focused on reviews published before the Oscar ceremony each year.</li>
-</ul>
+Preliminary results show that language and fan engagement can help distinguish Oscar winners from other nominees. While our full metrics are still being finalized, early model accuracy and precision outperform basic baselines. Certain categories (e.g. Best Picture, Acting Awards) show stronger signals than others.
+
+We recommend future versions include historical Oscar trend features, more granular text sentiment scoring, and possibly external critic sources to supplement fan reviews.
+
+---
+
+<h2 align="center">🔁 Reproducing the Results</h2>
+
+To reproduce the results:
+1. Clone the repository.
+2. Run the scraping scripts (if access is granted) or load the provided dataset.
+3. Install dependencies from `requirements.txt`.
+4. Run the pipeline scripts in order:
+   - `data_cleaning.py`
+   - `feature_engineering.py`
+   - `model_training.py`
+   - `evaluate_model.py`
+
+This will allow you to fully replicate the modeling and evaluation steps described above.
+
+---
+
+<h3>📚 Sources</h3>
+
+- **Oscar Nominee & Winner Data**: [Academy Awards Archive (2012–2025)](https://www.oscars.org/oscars/ceremonies/)
+- **Letterboxd Review Data**: Scraped using custom Selenium + BeautifulSoup scripts (not for commercial use)
+
+---

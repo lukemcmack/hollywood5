@@ -39,7 +39,7 @@ We collected Letterboxd reviews for nominated films, filtering to include only r
 <h2 align="center">The Model(s)</h2>
 
 <p>
-Our primary modeling approach classifies whether a nominated film won its Oscar category. We preprocess the Letterboxd review text features and feed this into a classifier. Then, the model learns patterns in the language and review engagement surrounding films to predict Oscar outcomes.
+Our approach classifies whether a nominated film won its Oscar category. We preprocess the Letterboxd review text features and feed this into a classifier. Then, the model learns patterns in the language and review engagement surrounding films to predict Oscar outcomes.
 <p>
 We plan to experiment with other models (models used?) for both text features and non-text data (e.g., star ratings, review counts, genre tags).
 </p>

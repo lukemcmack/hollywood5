@@ -1,11 +1,12 @@
 import re
 import csv
+import os
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-df = pd.read_csv("LetterBox_URL.csv")
+df = pd.read_csv(os.path.join("data", "LetterBox_URL.csv"))
 df = df.drop_duplicates(subset="url")
 df = df.dropna(subset=["url"])
 
@@ -38,8 +39,6 @@ def clean_text(s):
         return ""
     return re.sub(r'[,"\n\r“”‘’\'’]', '', s).strip()
 
-df["Nominee Name(s)"] = df["Nominee Name(s)"].apply(clean_awardees)
-
 results = []
 with ThreadPoolExecutor(max_workers=30) as executor:
     future_to_url = {executor.submit(scrape_letterboxd, url): url for url in df["url"]}
@@ -61,4 +60,4 @@ for col in ["Description", "Genre", "Cast", "Studios"]:
 
 df = df.drop(columns=["Award Title", "Won", "Year", "url", "Nominee Name(s)"])
 
-df.to_csv("film_metadata.csv", index=False)
+df.to_csv(os.path.join("data", "film_metadata.csv"), index=False)

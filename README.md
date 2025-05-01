@@ -4,7 +4,7 @@
 <h2 align="center">🎬 Project Description</h2>
 
 <p align="justify">
-Our goal is to build a model that predicts whether an Oscar-nominated film will win its category, based on audience sentiment and engagement. We use natural language processing (NLP) on Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement—combined with basic film metadata—can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
+Our goal is to build a model that predicts whether an Oscar-nominated film will win its category, based on audience sentiment and engagement. We use data from Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement — combined with basic film metadata — can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
 </p>
 
 ---

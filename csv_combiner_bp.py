@@ -53,9 +53,14 @@ filtered_reviews = reviews_with_dates[
 ]
 
 print("Combining reviews per film")
-review_groups = filtered_reviews.groupby("film_name")["review_text"].apply(
-    lambda x: " ".join(str(r) for r in x if pd.notna(r))
-).reset_index()
+review_groups = (
+    filtered_reviews
+    .dropna(subset=["review_text"])
+    .groupby("film_name")
+    .apply(lambda g: " ".join(g.sample(n=min(len(g), 1000), random_state=42)["review_text"]))
+    .reset_index()
+    .rename(columns={0: "Review Text"})
+)
 review_groups.rename(columns={"review_text": "Review Text"}, inplace=True)
 
 print("Merging full metadata with review texts")

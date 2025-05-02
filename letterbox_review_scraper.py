@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # Configuration
 BATCH_SIZE = 1
 OUTPUT_FILE = "data/film_reviews_all_ratings.csv"
-INPUT_CSV = "data/LetterBox_URL.csv"
+INPUT_CSV = "data/scraping_data_splits/LetterBox_URL_2012_2014.csv"
 
 def parse_rating(rating_text):
     """Converts Letterboxd star ratings to numerical values."""

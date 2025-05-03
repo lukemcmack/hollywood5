@@ -15,7 +15,7 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 - **Oscar Award Data**: Manually compiled from the official Academy Awards website (2015–2025), including award categories, nominee and winner names, and credited producers.  
   <i>(Data collection by Luke, Daniel)</i>
-  - **Letterboxd URLS**: Gathered URLs from Letterboxd using letterboxd's standard formatting. For films that did not follow standard formatting, used Perplexity's API to gather URLs using custom prompt. Finally, manually searched for remaining URLs not gathered by either process.  
+  - **Letterboxd URLS**: Created the possible urls using the knowledge of letterboxd's standard formatting. The main structure is the name of the movie all in lower case, and the spaces are switched to dashes. The movies that already have other movies with the same name in the letterbox website have the release year added to the ending of their name. The few urls that were not found were added manually since they were less than 20. 
   <i>(Standard process by Luke, API process and support for standard process by Matias)</i>
 - **Letterboxd Reviews**: Scraped using a custom crawler, gathering user-written reviews, timestamps, star ratings, likes, and comment counts for each nominated film.  
   <i>(Scraping by Luke)</i>

@@ -4,7 +4,7 @@
 <h2 align="center">🎬 Project Description</h2>
 
 <p align="justify">
-Our goal is to build a model that predicts whether an Oscar-nominated film will win its category, based on audience sentiment and engagement. We use data from Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement — combined with basic film metadata — can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
+Our goal is to build a model that predicts whether an Oscar-nominated film will win Best Picture based on audience sentiment and engagement. We use data from Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement — combined with basic film metadata — can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
 </p>
 
 ---
@@ -13,10 +13,8 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Sources</h3>
 
-- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2015–2025), including award categories, and nominee and winner names.  
-- **Letterboxd URLS**: Created the possible urls using the knowledge of letterboxd's standard formatting. The main structure is the name of the movie all in lower case, and the spaces are switched to dashes. The movies that already have other movies with the same name in the letterbox website have the release year added to the ending of their name. The few urls that were not found were added manually since they were less than 20. 
-- **Letterboxd Reviews**: Scraped using a custom crawler, gathering user-written reviews, timestamps, star ratings, likes, and comment counts for each nominated film.  
-- **Letterboxd Metadata**: Scraped using a custom crawler, gathering movie data such as description, producers, and studios for each nominated film.  
+- Our **Oscars award data** was manually compiled from the official Academy Awards website for the years 2015-2025, which records the title of each nominee and the eventual winners.
+- The **Viewer reviews and film metadata** were scraped from Letterboxd.com, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
 ---
 <h3>Features</h3>
 <ul>
@@ -25,7 +23,6 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   <li>List of cast members and studios (as categorical features)</li>
   <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
-
 
 <h3 align="left">Collection Methodology</h3>
 

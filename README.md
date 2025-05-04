@@ -76,6 +76,12 @@ We recommend future versions include historical Oscar trend features, more granu
 
 <h2 align="center">Reproducing the Results</h2>
 
+**The required Python packages are:**
+- **pandas** – for data manipulation and analysis  
+- **requests** – for making HTTP requests to fetch web pages  
+- **beautifulsoup** – for parsing HTML and extracting data from web pages  
+- **scikit-learn** – for machine learning models and data preprocessing  
+
 To reproduce the results:
 1. Clone the repository.
 2. Install dependencies from `requirements.txt`.

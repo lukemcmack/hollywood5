@@ -31,7 +31,7 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   <li>Then, using our knowledge of Letterboxd's standard formatting, we added the Letterboxd URLs for each film into a data set to use for our scraper.</li>
   <li>LUKE EXPLAIN HOW YOU SCRAPED REVIEWS PER RATING</li>
   <li>Using a <code>requests</code> scraper, we then gathered film metadata such as the description text, the genre, cast names, and studio names.</li>
-  <li>We then combined the data from steps (3) and (4) into a master data set. This involved standardizing the "time posted" data for the reviews, filtering for reviews posted before the given year's ceremony date, and combining 10,000 randomly selected English-language reviews into a single text parameter for NLP processing.</li>
+  <li>We then combined the data from steps (3) and (4) into a master data set. This involved standardizing the "time posted" data for the reviews, filtering for reviews posted before the given year's ceremony date, and combining 10,000 randomly selected English-language reviews into a single text parameter for NLP processing. At first, we tried taking the random sample before actually translating non-English reviews, but we lacked the processing power to pull it off. We then pivoted to the approach of using <code>langdetect</code> in conjunction with <code>swifter</code> to simply filter out non-English reviews _before_ taking our sample, massively simplifying the process and reducing our runtime.</li>
   <li>MODEL DESIGNERS EXPLAIN THE PROCESS HERE</li>
 </ol>
 
@@ -56,7 +56,7 @@ Future extensions will include experiments with:
 
 ---
 
-<h2 align="center">📊 Results and Recommendations</h2>
+<h2 align="center">Results and Recommendations</h2>
 
 Preliminary results show that language and fan engagement can help distinguish Oscar winners from other nominees. While our full metrics are still being finalized, early model accuracy and precision outperform basic baselines. Certain categories (e.g. Best Picture, Acting Awards) show stronger signals than others.
 
@@ -64,7 +64,7 @@ We recommend future versions include historical Oscar trend features, more granu
 
 ---
 
-<h2 align="center">🔁 Reproducing the Results</h2>
+<h2 align="center">Reproducing the Results</h2>
 
 To reproduce the results:
 1. Clone the repository.

@@ -13,8 +13,8 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Sources</h3>
 
-- Our **Oscars award data** was manually compiled from the official Academy Awards website for the years 2015-2025, which records the title of each nominee and the eventual winners.
-- The **Viewer reviews and film metadata** were scraped from Letterboxd.com, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
+- Our **Oscars award data** was manually compiled from the <a href="https://www.oscars.org">official Academy Awards website</a> for the years 2015-2025, which records the title of each nominee and the eventual winners.
+- The **Viewer reviews and film metadata** were scraped from <a href="https://letterboxd.com/films/">Letterboxd.com</a>, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
 ---
 <h3>Features</h3>
 <ul>

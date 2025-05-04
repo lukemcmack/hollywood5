@@ -11,7 +11,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import (
     defaultdict,
 )  
-from glmnet import LogitNet
 
 
 #nltk.download("punkt")
@@ -44,6 +43,10 @@ def preprocess(text):
     # Tokenize: split the text into words
 	text=re.sub(r"[^a-zA-Z\s]", "",text)
 	tokens=nltk.word_tokenize(text)
+	return tokens
+def rm_stop_words(): 
+	
+
 	tokens=[word for word in tokens if word not in stop_words]
 	return tokens
 

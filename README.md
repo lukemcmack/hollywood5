@@ -1,7 +1,7 @@
 <h1 align="center">Hollywood 5 (potentially CineClassifiers or Film Forecasters or Red Carpet Recommenders? eh? eh? get it?)</h1>
 <h2 align="center">By Orlando Di Leo, Matias Ibarburu, Luke McDonald, Daniel Urrutia, Jisoo Yoo</h2>
 <p align="center"> <img src="https://hips.hearstapps.com/hmg-prod/images/overview-of-the-oscar-statue-at-meet-the-oscars-at-the-time-news-photo-1588178852.jpg" alt="An image of an Oscar trophy." width="500"> </p>
-<h2 align="center">🎬 Project Description</h2>
+<h2 align="center">Project Description</h2>
 
 <p align="justify">
 Our goal is to build a model that predicts whether an Oscar-nominated film will win Best Picture based on audience sentiment and engagement. We use data from Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement — combined with basic film metadata — can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
@@ -46,11 +46,12 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Limitations</h3>
 
+- Our models are limited to the random sample of reviews, for the purpose of making it reasonable to process our data. With more time, or a more powerful machine, we could take the entire data set at face value and perhaps construct a more accurate profile of the public perception of the films.
+- With our method, we do not take into account the sentiments of foreign-language reviewers, eliminating a significant (~30) percentage of our data set. Distinct national trends could affect the efficacy of our models.
 - Audience behavior may shift after nominations are announced, even before winners are revealed—introducing possible bias despite our review cutoff.
 - Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
 - Review volume varies across films, especially in smaller or foreign-language categories.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
-- Not all nominee categories are equally represented in the data (e.g. Short Films vs. Best Picture).
 
 ---
 

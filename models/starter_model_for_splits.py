@@ -142,7 +142,6 @@ def main():
         print(f"Actual winner: {year_result['actual_winner']}")
         print(f"Predicted winner: {year_result['predicted_winner']}")
         print(f"Correct prediction: {year_result['correct_prediction']}")
-        print(f"Accuracy: {year_result['accuracy']:.2f}")
     
     # Convert results to DataFrame
     results_df = pd.DataFrame(results)
@@ -152,7 +151,6 @@ def main():
     correct_winners = results_df['correct_prediction'].sum()
     
     print("\n=== Final Results ===")
-    print(f"Average accuracy across years: {avg_accuracy:.2f}")
     print(f"Correctly predicted winners in {correct_winners} of {len(years)} years")
     
 

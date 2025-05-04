@@ -30,7 +30,12 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 <h3 align="left">Collection Methodology</h3>
 
 <p>
-We scraped Letterboxd reviews for each nominated film, filtering to include only reviews posted before the Oscar ceremony of that year. This simulates a true prediction setting based on pre-award public sentiment. We also manually compiled film-level metadata such as director, editor, producers, and production studio from official Oscar pages and IMDb. These categorical variables give us additional context about the film’s pedigree—information we suspect might carry predictive weight alongside audience reception.
+(1) First, we scraped the nominees for Best Picture from 2015 to 2025 from the official Academy Awards website, encoding whether they won or note in our binary outcome variable. We also scraped the Oscars ceremony date for each year, so that we can filter out post-ceremony reviews later.
+(2) Then, using our knowledge of Letterboxd's standard formatting, we added the Letterboxd URLs for each film into a data set to use for our scraper.
+(3) LUKE EXPLAIN HOW YOU SCRAPED REVIEWS PER RATING
+(4) Using a scraper, we then gathered film metadata such as the description text, the genre, cast names, and studio names.
+(5) We then combined the data from steps (3) and (4) into a master data set.  This involved standardizing the time posted data for the reviews, filtering for reviews posted before the given year's ceremony date, and combining 10,000 randomly selected English-language reviews into a single text parameter for NLP processing.
+(6) MODEL DESIGNERS EXPLAIN THE PROCESS HERE
 </p>
 
 <h3>Limitations</h3>

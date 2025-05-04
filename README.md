@@ -13,11 +13,14 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Sources</h3>
 
-- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2012–2025), including award categories, nominee and winner names, and credited producers.  
-  <i>(Data collection by Luke McDonald and Daniel Urrutia)</i>  
+- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2015–2025), including award categories, nominee and winner names, and credited producers.  
+  <i>(Data collection by Luke, Daniel)</i>
+  - **Letterboxd URLS**: Created the possible urls using the knowledge of letterboxd's standard formatting. The main structure is the name of the movie all in lower case, and the spaces are switched to dashes. The movies that already have other movies with the same name in the letterbox website have the release year added to the ending of their name. The few urls that were not found were added manually since they were less than 20. 
+  <i>(Standard process by Luke, API process and support for standard process by Matias)</i>
 - **Letterboxd Reviews**: Scraped using a custom crawler, gathering user-written reviews, timestamps, star ratings, likes, and comment counts for each nominated film.  
-  <i>(Scraping by Luke McDonald)</i>
-
+  <i>(Scraping by Luke)</i>
+- **Letterboxd Metadata**: Scraped using a custom crawler, gathering movie data such as description, producer, etc. for each nominated film.  
+  <i>(Scraping by Jisoo)</i>
 ---
 <h3>Features</h3>
 <ul>
@@ -82,7 +85,7 @@ This will allow you to fully replicate the modeling and evaluation steps describ
 
 <h3>📚 Sources</h3>
 
-- **Oscar Nominee & Winner Data**: [Academy Awards Archive (2012–2025)](https://www.oscars.org/oscars/ceremonies/)
+- **Oscar Nominee & Winner Data**: [Academy Awards Archive (2015–2025)](https://www.oscars.org/oscars/ceremonies/)
 - **Letterboxd Review Data**: Scraped using custom Selenium + BeautifulSoup scripts (not for commercial use)
 
 ---

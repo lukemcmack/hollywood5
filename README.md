@@ -13,21 +13,16 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Sources</h3>
 
-- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2015–2025), including award categories, nominee and winner names, and credited producers.  
-  <i>(Data collection by Luke, Daniel)</i>
-  - **Letterboxd URLS**: Created the possible urls using the knowledge of letterboxd's standard formatting. The main structure is the name of the movie all in lower case, and the spaces are switched to dashes. The movies that already have other movies with the same name in the letterbox website have the release year added to the ending of their name. The few urls that were not found were added manually since they were less than 20. 
-  <i>(Standard process by Luke, API process and support for standard process by Matias)</i>
+- **Oscar Award Data**: Manually compiled from the official Academy Awards website (2015–2025), including award categories, and nominee and winner names.  
+- **Letterboxd URLS**: Created the possible urls using the knowledge of letterboxd's standard formatting. The main structure is the name of the movie all in lower case, and the spaces are switched to dashes. The movies that already have other movies with the same name in the letterbox website have the release year added to the ending of their name. The few urls that were not found were added manually since they were less than 20. 
 - **Letterboxd Reviews**: Scraped using a custom crawler, gathering user-written reviews, timestamps, star ratings, likes, and comment counts for each nominated film.  
-  <i>(Scraping by Luke)</i>
-- **Letterboxd Metadata**: Scraped using a custom crawler, gathering movie data such as description, producer, etc. for each nominated film.  
-  <i>(Scraping by Jisoo)</i>
+- **Letterboxd Metadata**: Scraped using a custom crawler, gathering movie data such as description, producers, and studios for each nominated film.  
 ---
 <h3>Features</h3>
 <ul>
-  <li>Preprocessed review text (for NLP analysis)</li>
-  <li>Average star rating and number of reviews</li>
-  <li>Engagement metrics (likes, comments)</li>
-  <li>Director, editor, producer(s), and studio (as categorical features)</li>
+  <li>Description and genre of film, taken from Letterboxd</li>
+  <li>Combined text of 10,000 reviews per Best Picture nominee (for NLP analysis)</li>
+  <li>List of cast members and studios (as categorical features)</li>
   <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
 

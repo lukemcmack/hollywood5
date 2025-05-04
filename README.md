@@ -34,10 +34,10 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 <li>
   We then combined the data from steps (3) and (4) into a master data set. This involved standardizing the "time posted" data for the reviews, filtering for reviews posted before the given year's ceremony date, and combining 10,000 randomly selected English-language reviews into a single text parameter for NLP processing.
   <div style="margin-left: 2em;">
-    At first, we tried taking the random sample before actually translating non-English reviews, but we lacked the processing power to pull it off.
+    - At first, we tried taking the random sample before actually translating non-English reviews, but we lacked the processing power to pull it off.
   </div>
   <div style="margin-left: 2em;">
-    We then pivoted to the approach of using <code>langdetect</code> in conjunction with <code>swifter</code> to simply filter out non-English reviews <em>before</em> taking our sample, massively simplifying the process and reducing our runtime.
+    - We then pivoted to the approach of using <code>langdetect</code> in conjunction with <code>swifter</code> to simply filter out non-English reviews <em>before</em> taking our sample, massively simplifying the process and reducing our runtime.
   </div>
 </li>
 

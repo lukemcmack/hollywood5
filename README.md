@@ -9,14 +9,14 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 ---
 
-<h2 align="center">🗂️ The Data</h2>
+<h2 align="center">The Data</h2>
 
-<h3>Sources</h3>
+<h3 align="left">Sources</h3>
 
 - Our **Oscars award data** was manually compiled from the <a href="https://www.oscars.org">official Academy Awards website</a> for the years 2015-2025, which records the title of each nominee and the eventual winners.
 - The **Viewer reviews and film metadata** were scraped from <a href="https://letterboxd.com/films/">Letterboxd.com</a>, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
 ---
-<h3>Features</h3>
+<h3 align="left">Features</h3>
 <ul>
   <li>Description and genre of film, taken from Letterboxd</li>
   <li>Combined text of 10,000 reviews per Best Picture nominee (for NLP analysis)</li>

@@ -71,15 +71,8 @@ We recommend future versions include historical Oscar trend features, more granu
 
 To reproduce the results:
 1. Clone the repository.
-2. Run the scraping scripts (if access is granted) or load the provided dataset.
-3. Install dependencies from `requirements.txt`.
-4. Run the pipeline scripts in order:
-   - `data_cleaning.py`
-   - `feature_engineering.py`
-   - `model_training.py`
-   - `evaluate_model.py`
+2. Install dependencies from `requirements.txt`.
 
-This will allow you to fully replicate the modeling and evaluation steps described above.
 
 ---
 

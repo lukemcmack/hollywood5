@@ -79,13 +79,3 @@ We recommend future versions include historical Oscar trend features, more granu
 To reproduce the results:
 1. Clone the repository.
 2. Install dependencies from `requirements.txt`.
-
-
----
-
-<h3>📚 Sources</h3>
-
-- **Oscar Nominee & Winner Data**: [Academy Awards Archive (2015–2025)](https://www.oscars.org/oscars/ceremonies/)
-- **Letterboxd Review Data**: Scraped using custom Selenium + BeautifulSoup scripts (not for commercial use)
-
----

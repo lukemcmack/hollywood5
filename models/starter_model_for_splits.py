@@ -155,15 +155,6 @@ def main():
     print(f"Average accuracy across years: {avg_accuracy:.2f}")
     print(f"Correctly predicted winners in {correct_winners} of {len(years)} years")
     
-    # Visualization
-    plt.figure(figsize=(12, 6))
-    bars = plt.bar(results_df['year'].astype(str), results_df['accuracy'])
-    plt.axhline(avg_accuracy, color='red', linestyle='--', label=f'Average: {avg_accuracy:.2f}')
-    
-    # Add correct prediction markers
-    for i, correct in enumerate(results_df['correct_prediction']):
-        if correct:
-            bars[i].set_color('green')
 
 if __name__ == "__main__":
     main()

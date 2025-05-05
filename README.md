@@ -78,9 +78,17 @@ In our context, movie reviews can contain complex patterns and nuance in languag
 The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
 
 
+<h3>Text Tokenization with Logistic Regression Classifier</h3>
 
-Logistic Regression Classifier with Text Tokenization
-To start, we merged all the individual English-language review documents for each film nominee to a single document separated by a space. This dataset is used for all models except the embedding model discussed below. This model uses 1-word and 2-word grams to tokenize the large aggregated review text. This choice came because we wanted to make sure to distinguish adding negative connotations to words such as "the acting was great" versus "the acting was not great". Another model choice was removing certain stop words. We used the default english stop words from scikitlearn CountVectorizer() along with some additional choice stop words including: film names, cast names, and studio names from all films in the dataset. This choice was made after initial results found many of the important features to be movie or actor names, which would not accurately predict the best movie for another year. A minimum number of token appearances was set to 10 to remove any words that do not appear frequently. Lastly, we used a logistic regression classifier using ridge regularization to weight the features.
+This model implements scikitlearn's CountVectorizer and LogisticRegressionCV.
+
+To start, we merged all the individual English-language review documents for each film nominee to a single document separated by a space. This dataset is used for all models except the embedding model discussed below. This model uses 1-word and 2-word grams to tokenize the large aggregated review text. This choice came because we wanted to make sure to distinguish adding negative connotations to words such as "the acting was great" versus "the acting was not great". 
+
+Another model choice was removing certain stop words. We used the default english stop words from scikitlearn CountVectorizer() along with some additional choice stop words including: film names, cast names, and studio names from all films in the dataset. This choice was made after initial results found many of the important features to be movie or actor names, which would not accurately predict the best movie for another year. A minimum number of token appearances was set to 10 to remove any words that do not appear frequently. Lastly, we used a logistic regression classifier using ridge regularization to weight the features.
+
+<h3>Embedding Model</h3>
+
+This model implements SentenceTransformer's FINISH WRITEUP
 
 
 Future extensions will include experiments with:
@@ -101,6 +109,8 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 ---
 
 <h2 align="center"> Discussion </h2>
+
+Interestingly, all of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. 
 
 ---
 

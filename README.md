@@ -70,7 +70,7 @@ The model is configured with parameters, such as max_depth, min_samples_split, a
 
 ---
 
-<h2 align="center">📊 Results </h2>
+<h2 align="center">Results </h2>
 
 <h3>Gradient Boosting</h3>
 

@@ -13,16 +13,16 @@ We aim to predict which film will win Best Picture based on review text. For eac
 
 <h3>Target Metrics</h3>
 <b>Average probability of the actual winner</b>
-How strongly the model “believes” in the true winner, even if it doesn't place it first. This reflects whether the model is reasonably calibrated or just totally missing the signal. If the winner always gets 0.20 probability out of 5 films, that’s weak; if it often gets 0.60+, it’s much better.
+How strongly the model “believes” in the true winner, even if it doesn't place it first. This reflects whether the model is reasonably calibrated or receiving weak signals. If the winner always gets 0.10 probability out of 10 films, that’s weak; if it often gets 0.60+, that is better.
 
 <b>Winner correctly predicted (top-ranked)</b>
-Whether the model actually picks the correct film as the most likely winner—our main goal from a practical standpoint. Even if a model assigns high probability to the right movie, it’s a fail if another film edges it out every time.
+Whether the model actually picks the correct film as the most likely winner; our main goal from a practical standpoint. Even if a model assigns high probability to the right movie, it will not get chosen as the predicted winner if another film edges it out every time.
 
 <b>Why these over ROC/AUC?</b>
 ROC curves and AUC are useful for binary classification problems across many thresholds, however in this context they are not as effective:
 - The competition is within each year’s nominee pool, not across all films globally.
-- ROC/AUC assume a global positive vs. negative class structure, but we are predicting a winner among multiple nominees in a single year—a mutually exclusive choice.
-- Even strong ROC scores wouldn't guarantee you pick the actual winner in a given year; it might just mean we consistently rank winners slightly higher overall.
+- ROC/AUC assume a global positive vs. negative class structure, but we are predicting a winner among multiple nominees in a single year which is a mutually exclusive choice.
+- Even strong ROC scores wouldn't guarantee we pick the actual winner in a given year; it might just mean we consistently rank winners slightly higher overall.
 
 Thus, our metrics are tailored to finding confidence in and predicting the correct winner accross years.
 
@@ -49,7 +49,7 @@ Thus, our metrics are tailored to finding confidence in and predicting the corre
 <ol>
   <li>First, we scraped the nominees for Best Picture from 2015 to 2025 from the official Academy Awards website, encoding whether they won or not in our binary outcome variable. We also scraped the Oscars ceremony date for each year, so that we can filter out post-ceremony reviews later.</li>
   <li>Then, using our knowledge of Letterboxd's standard formatting, we added the Letterboxd URLs for each film into a data set to use for our scraper.</li>
-  <li>LUKE EXPLAIN HOW YOU SCRAPED REVIEWS PER RATING</li>
+  <li>We scraped reviews by looping through each rating category (e.g., 5 stars, 4.5 stars, etc.) on the Letterboxd film page, beginning with the oldest reviews first. Letterboxd limits reviews after approximately 30,000 reviews for each rating category, so this process allowed us to get more data than we would have otherwise. For each category, we paginated through all available reviews, extracting the review text, user, rating, and date, then saved them in batches to avoid data loss.
   <li>Using a <code>requests</code> scraper, we then gathered film metadata such as the description text, the genre, cast names, and studio names.</li>
 <li>
   We then combined the data from steps (3) and (4) into a master data set. This involved standardizing the "time posted" data for the reviews, filtering for reviews posted before the given year's ceremony date, and combining 10,000 randomly selected English-language reviews into a single text parameter for NLP processing.
@@ -89,7 +89,7 @@ We use a classification approach to predict whether each nominated film won the 
 
 <h3>Gradient Boosting</h3>
 
-Uses scikit learn's HistGradientBoostingClassifier to predict Best Picture winners based on text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
+Uses scikit learn's GradientBoostingClassifier to predict Best Picture winners based on text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
 
 In our context, movie reviews can contain complex patterns and nuance in language. Additionally, the structure or reviews can vary vastly between users. Thus Gradient Boosting is particularly effective in capturing these non-linear relationships in the data, allowing it to outperform simpler models like logistic regression.
 

@@ -20,6 +20,7 @@ Whether the model actually picks the correct film as the most likely winner; our
 
 <b>Why these over ROC/AUC?</b>
 ROC curves and AUC are useful for binary classification problems across many thresholds, however in this context they are not as effective:
+
 - The competition is within each year’s nominee pool, not across all films globally.
 - ROC/AUC assume a global positive vs. negative class structure, but we are predicting a winner among multiple nominees in a single year which is a mutually exclusive choice.
 - Even strong ROC scores wouldn't guarantee we pick the actual winner in a given year; it might just mean we consistently rank winners slightly higher overall.
@@ -62,9 +63,7 @@ Please contact the authors for any issues with data retrieval. The data is not u
   <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
 
-
 <h3 align="left">Methodology</h3>
-
 
 <ol>
   <li>First, we scraped the nominees for Best Picture from 2015 to 2025 from the official Academy Awards website, encoding whether they won or not in our binary outcome variable. We also scraped the Oscars ceremony date for each year, so that we can filter out post-ceremony reviews later.</li>
@@ -120,7 +119,6 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 
 <h2 align="center">The Model(s)</h2>
 
-
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 Implements scikit-learn's CountVectorizer and LogisticRegressionCV to predict Academy Awards Best Picture winners based on Letterboxd text reviews. CountVectorizer transforms raw text into a matrix of token counts, creating columns for each unique word or phrase and recording how often it appears in each document. This model is also referred to as a Bag-of-Words model because we are collecting the word/phrase counts in no particular order. Since the Oscars are partially driven by subjective critical acclaim, a simple bag-of-words approach can offer a surprisingly strong baseline by capturing patterns in how reviewers describe the nominees.
@@ -131,7 +129,7 @@ Another model choice was removing certain stop words. In this model, we used the
 
 <h3>Embedding Model with Logistic Regression Classifier</h3>
 
-Implements SentenceTransformers' all-MiniLM-L12-v2 pretrained embedding model to predict Academy Awards Best Picture winners based on Letterboxd text reviews. This transformer-based model is pretrained on billions of sentences, making it well-suited to capturing semantic meaning in movie reviews. Instead of treating reviews as a bags of words, the model generates  vector representations (embeddings) to reflect the contextual meaning of each review.
+Implements SentenceTransformers' all-MiniLM-L12-v2 pretrained embedding model to predict Academy Awards Best Picture winners based on Letterboxd text reviews. This transformer-based model is pretrained on billions of sentences, making it well-suited to capturing semantic meaning in movie reviews. Instead of treating reviews as a bags of words, the model generates vector representations (embeddings) to reflect the contextual meaning of each review.
 
 Each individual review is passed through the embedding model to produce a fixed-length vector. We then aggregate these review-level vectors for each film by taking their mean, resulting in a single semantic embedding per nominee. This aggregation helps summarize the overall sentiment and thematic content of a film’s reviews in a compact form.
 
@@ -141,12 +139,11 @@ Lastly, the resulting film-level embeddings are fed into a logistic regression c
 
 <h3>Temporal-Weighted Naive Bayes</h3>
 
-This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict Oscar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews. 
+This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict Oscar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews.
 
+Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased.
 
-Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased. 
-
-Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words. 
+Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words.
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
 
@@ -168,6 +165,14 @@ The model is configured with parameters, such as max_depth, min_samples_split, a
 
 <h2 align="center">Results </h2>
 
+<h3>Interpretting the results</h3>
+
+The example graph below illustrates the anatomy of graphs in the results section. The lower blue line represents the predicted probability of winning for the actual winner in the year (i.e., the point in 2025 represents the predicted probability of Anora winning). To note: Oscar awards are mutually exclusive within a year, and our models normalize this probability; each of the nominated films has a probability of winning greater than or equal to zero, with all films' probability summing to 1.
+
+The Red/Orange Line represents the probability of winning for the given model's predicted winner in that year. Points where the two lines meet represent a correct prediction (the actual winner has the highest predicted probability). Low probability of winning for the actual winner compared to high probability for the predicted winner represent "bad misses". For cleanliness, we exclude labels from all of the graphs other than this example.
+
+![Embedding Model Results](data/Visuals/example_labeled_graph.png)
+
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 <b>Years Correctly Predicted: 1</b>
@@ -187,7 +192,6 @@ Out of 11 years, the logistic regression model predicted the Best Picture winner
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
 
 ![Embedding Model Results](data/Visuals/embedding.png)
-
 
 <h3>Temporal-Weighted Naive Bayes</h3>
 
@@ -236,32 +240,33 @@ Interestingly, some consistencies popped up across models. For example 4 out of 
 <h2 align="center">Reproducing the Results</h2>
 
 **The required Python packages are:**
-- **pandas** – for data manipulation and analysis  
-- **numpy** – for numerical computations  
-- **requests** – for making HTTP requests to fetch web pages  
-- **beautifulsoup4** – for parsing HTML and extracting data from web pages  
-- **scikit-learn** – for modeling and data preprocessing  
-- **nltk** – for natural language processing tasks like tokenization and stop word removal  
-- **sentence-transformers** – for generating semantic embeddings from text reviews  
-- **matplotlib** – for creating visualizations  
-- **langdetect** – for identifying the language of film reviews  
-- **swifter** – for efficiently applying functions to a pandas DataFrame  
-- **tqdm** – for tracking the progress of any number of processes  
-- **re** – for working with regular expressions and text cleaning  
-- **os** – for interacting with the operating system and handling file paths  
-- **heapq** – for efficient heap queue operations  
-- **unicodedata** – for normalizing and cleaning Unicode text  
-- **string** – for string constants and text processing utilities  
-- **datetime** – for handling and formatting date and time information  
-- **pathlib** – for working with and navigating file system paths  
-- **collections** – for specialized data structures like defaultdict  
-- **csv** – for reading and writing CSV files  
-- **ftfy** – for fixing Unicode errors and messy text in scraped reviews  
-- **threading** – for multi-threaded execution  
-- **concurrent.futures** – for parallelizing tasks across multiple threads  
+
+- **pandas** – for data manipulation and analysis
+- **numpy** – for numerical computations
+- **requests** – for making HTTP requests to fetch web pages
+- **beautifulsoup4** – for parsing HTML and extracting data from web pages
+- **scikit-learn** – for modeling and data preprocessing
+- **nltk** – for natural language processing tasks like tokenization and stop word removal
+- **sentence-transformers** – for generating semantic embeddings from text reviews
+- **matplotlib** – for creating visualizations
+- **langdetect** – for identifying the language of film reviews
+- **swifter** – for efficiently applying functions to a pandas DataFrame
+- **tqdm** – for tracking the progress of any number of processes
+- **re** – for working with regular expressions and text cleaning
+- **os** – for interacting with the operating system and handling file paths
+- **heapq** – for efficient heap queue operations
+- **unicodedata** – for normalizing and cleaning Unicode text
+- **string** – for string constants and text processing utilities
+- **datetime** – for handling and formatting date and time information
+- **pathlib** – for working with and navigating file system paths
+- **collections** – for specialized data structures like defaultdict
+- **csv** – for reading and writing CSV files
+- **ftfy** – for fixing Unicode errors and messy text in scraped reviews
+- **threading** – for multi-threaded execution
+- **concurrent.futures** – for parallelizing tasks across multiple threads
 - **urllib.parse** – for parsing and manipulating URLs
 
-These can be installed using pip (or pip3):  
+These can be installed using pip (or pip3):
 
 ```bash
 pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm heapq unicodedata datetime pathlib collections ftfy threading concurrent.futures urllib.parse
@@ -275,7 +280,6 @@ import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
 ```
-
 
 ### Running the Models
 
@@ -299,4 +303,3 @@ nltk.download('stopwords')
         Run models.py in the models folder.
     </li>
 </ol>
-

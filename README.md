@@ -150,6 +150,11 @@ Since reviews can vary in tone and depth, we were able to utilize Textblob, whic
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
 
+<h3>Neural Network</h3>
+
+The ISL2 model we use is a basic two-layer neural network, following the structure described in An Introduction to Statistical Learning (ISL). This type of network consists of an input layer (taking in features like word counts or TF-IDF scores), one hidden layer of neurons where the model learns intermediate patterns, and an output layer that produces the final prediction.
+
+Each neuron in the hidden layer computes a weighted sum of the inputs, applies a non-linear activation function (ReLU), and passes the result forward. The output layer then combines these hidden-layer outputs to make a prediction, such as whether a film will win an award. The network learns by adjusting its weights to minimize prediction error, using gradient descent. The neural net is able to capture non-linear relationships between features.
 
 <h3>Gradient Boosting</h3>
 
@@ -168,7 +173,7 @@ The model is configured with parameters, such as max_depth, min_samples_split, a
 <b>Years Correctly Predicted: 0</b>
 <b>Average True Winner Probability: ~.01</b>
 
-Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
+Out of 11 years, the logistic regression model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
 
 ![Bag-of-Words Results](data/Visuals/bagofwords.png)
 
@@ -210,7 +215,6 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 <h2 align="center"> Discussion </h2>
 
 Overall, each of our models provides only modest results. Our models capture what’s available in the text, but many of the true predictors of award success lie outside the scope of this data. Factors like industry politics, marketing campaigns, historical trends, and the preferences of Academy voters likely play a much bigger role than what’s said in public reviews. It's possible that reviews which are a proxy for the quality of a movie doesn't sway several academy voters, per the fact that <a href="https://www.npr.org/2025/04/22/nx-s1-5372650/oscar-voting-changes" target="_blank">Academy voters were not required to watch movies they are voting on until 2026</a>.
-
 
 ![Model Results Comparison](data/Visuals/model-success.png)
 
@@ -270,7 +274,7 @@ nltk.download('stopwords')
 
 <ol>
     <li>
-        Clone the repository to your local machine:
+        Clone the repository to your local machine.
     </li>
     <li>
         Download the cleaned concatenated dataset at this link:
@@ -283,6 +287,9 @@ nltk.download('stopwords')
         <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
             Download Embedding Dataset
         </a> and save it in the folder 'Data'
+    </li>
+    <li>
+        Run models.py in the models folder.
     </li>
 </ol>
 

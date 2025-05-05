@@ -191,6 +191,11 @@ Out of 11 years, the Naive Bayes model correctly predicted the Best Picture winn
 
 ![Temporal-Weighted Naive Bayes Results](data/Visuals/temporal_weighted_naive_bayes_predictions_graph.png)
 
+<h3>Neural Network</h3>
+
+<b>Years Correctly Predicted: 0</b>
+Out of 11 years, the Neural Network model correctly predicted the Best Picture in none of the years (0% accuracy). This was the worst performing model of the five and had a close to zero average accuracy.
+
 <h3>Gradient Boosting</h3>
 
 <b>Years Correctly Predicted: 3</b>

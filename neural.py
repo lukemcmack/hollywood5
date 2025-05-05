@@ -9,21 +9,22 @@ from sklearn.utils import class_weight
 from sklearn.metrics import classification_report
 from sklearn.metrics import precision_score
 
-df=pd.read_csv("df_2021test.csv")
-df_train=df[df['Set']=='Train']
-df_test= df[df['Set']=='Test']
+df = pd.read_csv("df_2021test.csv")
+df_train = df[df["Set"] == "Train"]
+df_test = df[df["Set"] == "Test"]
 
 
-X_train=df_train.iloc[:, 9:]
-X_test=df_test.iloc[:, 9:]
-y_train=df_train.loc[:,'Won']
-y_test=df_test.loc[:,'Won']
+X_train = df_train.iloc[:, 9:]
+X_test = df_test.iloc[:, 9:]
+y_train = df_train.loc[:, "Won"]
+y_test = df_test.loc[:, "Won"]
 
 
 X_train_tensor = torch.tensor(np.array(X_train), dtype=torch.float32)
 X_test_tensor = torch.tensor(np.array(X_test), dtype=torch.float32)
 y_train_tensor = torch.tensor(np.array(y_train), dtype=torch.float32).unsqueeze(1)
 y_test_tensor = torch.tensor(np.array(y_test), dtype=torch.float32).unsqueeze(1)
+
 
 class BinaryTextClassifier(nn.Module):
     def __init__(self, input_size):
@@ -53,16 +54,15 @@ for epoch in range(50):
     loss.backward()
     optimizer.step()
 
-    if (epoch+1) % 10 == 0:
+    if (epoch + 1) % 10 == 0:
         print(f"Epoch {epoch+1}/50, Loss: {loss.item():.4f}")
-
 
 
 model.eval()
 with torch.no_grad():
     predictions = model(X_test_tensor)
     print(predictions)
-    preds = (predictions >=max(predictions)).int()
+    preds = (predictions >= max(predictions)).int()
     accuracy = (preds == y_test_tensor.int()).float().mean()
     y_true = y_test_tensor.int().numpy()
     y_pred = preds.numpy()
@@ -72,12 +72,5 @@ with torch.no_grad():
 
 
 class_weights = class_weight.compute_class_weight(
-    class_weight='balanced',
-    classes=np.unique(y_train),
-    y=y_train
+    class_weight="balanced", classes=np.unique(y_train), y=y_train
 )
-
-
-
-
-

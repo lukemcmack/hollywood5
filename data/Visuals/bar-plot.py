@@ -5,13 +5,13 @@ plt.style.use("seaborn-v0_8-whitegrid")
 
 # Model names and correct prediction counts
 models = [
-    "Gradient Boosting",
     "Bag-of-Words",
     "Embedding",
     "Temporal-Weighted\nNaive Bayes",
-    "Neural Network"
+    "Neural Network",
+    "Gradient Boosting"
 ]
-correct_predictions = [3, 0, 2, 2, 0]
+correct_predictions = [0, 2, 1, 0, 3]
 
 # Create the bar chart
 fig, ax = plt.subplots(figsize=(10, 6))

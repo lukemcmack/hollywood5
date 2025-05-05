@@ -199,13 +199,11 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 ---
 
 <h2 align="center"> Discussion </h2>
-=======
+
 Overall, each of our models provides only modest results. Our models capture what’s available in the text, but many of the true predictors of award success lie outside the scope of this data. Factors like industry politics, marketing campaigns, historical trends, and the preferences of Academy voters likely play a much bigger role than what’s said in public reviews. It's possible that reviews which are a proxy for the quality of a movie doesn't sway several academy voters, per the fact that <a href="https://www.npr.org/2025/04/22/nx-s1-5372650/oscar-voting-changes" target="_blank">Academy voters were not required to watch movies they are voting on until 2026</a>.
 
 
 ![Model Results Comparison](data/Visuals/model-success.png)
-
-The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
 Among our modest results, the <b>Gradient Boosting model</b> performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. When we vectorize the movie reviews, the resulting vector is a sparse and discontinuous; most words don’t appear in most reviews, which means there are a lot of zeros. This makes it difficult for simple models like logistic regression or NB, which expect smooth, linear patterns, to pick up on signals in the text.
 

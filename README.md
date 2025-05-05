@@ -113,7 +113,7 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 - With our method, we do not take into account the sentiments of foreign-language reviewers, eliminating a significant (~30) percentage of our data set. Distinct national trends could affect the efficacy of our models.
 - Audience behavior may shift after nominations are announced, even before winners are revealed—introducing possible bias despite our review cutoff.
 - Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
-- Review volume varies across films, especially in smaller or foreign-language categories.
+- Review volume varies across films.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
 - For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added. A longer dataset is available at [this Box link](https://utexas.app.box.com/s/b86722f1hoxeqy76dqw3ckfga09iqwfz/file/1853007371343).
 - Some Letterboxd reviews are likely trolls or unserious users who are not putting real reviews. Nothing was done to clean these potentially non-meaningful reviews.
@@ -204,6 +204,7 @@ Out of 11 years, the Naive Bayes model correctly predicted the Best Picture winn
 <b>Years Correctly Predicted: 0</b>
 
 <b>Average True Winner Probability: ~.01</b>
+
 Out of 11 years, the Neural Network model correctly predicted the Best Picture in none of the years (0% accuracy). This was the worst performing model of the five and had a close to zero average accuracy.
 
 <h3>Gradient Boosting</h3>

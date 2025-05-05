@@ -180,13 +180,15 @@ pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 
 ### Running the Models
 
-
 <ol>
     <li>
-        First, download the cleaned dataset at this link:
+        Clone the repository to your local machine:
+    </li>
+    <li>
+        Download the cleaned dataset at this link:
         <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
             Download Dataset
-        </a>.
+        </a> and save it in the folder 'Data'
     </li>
 </ol>
 

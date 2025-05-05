@@ -120,15 +120,6 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 
 <h2 align="center">The Model(s)</h2>
 
-<h3>Gradient Boosting</h3>
-
-Implements scikit learn's GradientBoostingClassifier to predict Best Picture winners based on Letterboxd text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
-
-In our context, movie reviews can contain complex patterns and nuance in language. Additionally, the structure or reviews can vary vastly between users. Thus Gradient Boosting is particularly effective in capturing these non-linear relationships in the data, allowing it to outperform simpler models like logistic regression.
-
-The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
-
-In Gradient Boosting (and other models in our project), we use Scikit-learn’s <code>TfidfVectorizer</code>, which is equivalent to a combination of sklearns <code>CountVectorizer</code> and  <code>TfidfTransformer</code> (Inverse Document Frequency) transformer. First, it counts how often each word (or n-gram) appears in each review, then adjusts the counts by how common each word is across all reviews, reducing the weight of very common words that aren’t likely to be meaningful.
 
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
@@ -159,22 +150,18 @@ Since reviews can vary in tone and depth, we were able to utilize Textblob, whic
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
 
-<h3>Neural Network</h3>
 
-This model implements a two layer neural network explained in Introduction to Statistical Learning. The reviews were cleaned from stopwords and formatted and then coded as a bag of words model with the top 500 words. The model was trained with a training set with all the movies in the years not used as the test year. The model was unable to predict correctly for any year.
+<h3>Gradient Boosting</h3>
 
+Implements scikit learn's GradientBoostingClassifier to predict Best Picture winners based on Letterboxd text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
+
+In our context, movie reviews can contain complex patterns and nuance in language. Additionally, the structure or reviews can vary vastly between users. Thus Gradient Boosting is particularly effective in capturing these non-linear relationships in the data, allowing it to outperform simpler models like logistic regression.
+
+The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
 
 ---
 
 <h2 align="center">Results </h2>
-
-<h3>Gradient Boosting</h3>
-
-<b>Years Correctly Predicted: 3</b>
-
-Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
-
-![Gradient Boosting Results](data/Visuals/gboost.png)
 
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
@@ -191,6 +178,14 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
 
 ![Embedding Model Results](data/Visuals/embedding.png)
+
+<h3>Gradient Boosting</h3>
+
+<b>Years Correctly Predicted: 3</b>
+
+Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
+
+![Gradient Boosting Results](data/Visuals/gboost.png)
 
 ---
 

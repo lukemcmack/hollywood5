@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 # Load data
 df = pd.read_csv("data/bp_embedding_data.csv")
 model = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2")
+#model = SentenceTransformer("all-MiniLM-L12-v2")
+
 
 # Precompute all review-level embeddings
 print("Encoding all reviews...")
@@ -97,11 +99,13 @@ print("\n=== Final Summary ===")
 print(f"Correctly predicted winners in {total_correct} of {len(years)} years")
 print(f"Average accuracy: {avg_accuracy:.3f}")
 
-plt.figure(figsize=(10, 6))
-plt.plot(results_df['year'], results_df['actual_prob'], marker='o', linestyle='-', color='blue')
-plt.title('Predicted Probability for Actual Winners Over the Years')
+plt.figure(figsize=(12, 6))
+plt.plot(results_df['year'], results_df['actual_prob'], marker='o', linestyle='-', color='blue', label='Actual Winner')
+plt.plot(results_df['year'], results_df['predicted_prob'], marker='s', linestyle='--', color='red', label='Predicted Winner')
+plt.title('Gradient Boosting Probabilities: Actual vs Predicted Winners Over the Years')
 plt.xlabel('Year')
 plt.ylabel('Normalized Predicted Probability')
 plt.ylim(0, 1)
+plt.legend()
 plt.grid(True)
 plt.show()

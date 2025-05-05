@@ -10,6 +10,7 @@ df = pd.read_csv(os.path.join("data", "LetterBox_URL.csv"))
 df = df.drop_duplicates(subset="url")
 df = df.dropna(subset=["url"])
 
+
 def scrape_letterboxd(url):
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
@@ -34,10 +35,12 @@ def scrape_letterboxd(url):
         print(f"Error scraping {url}: {e}")
         return (url, "", "", "", "", "", "", "")
 
+
 def clean_text(s):
     if pd.isna(s):
         return ""
-    return re.sub(r'[,"\n\r“”‘’\'’]', '', s).strip()
+    return re.sub(r'[,"\n\r“”‘’\'’]', "", s).strip()
+
 
 results = []
 with ThreadPoolExecutor(max_workers=30) as executor:
@@ -46,8 +49,7 @@ with ThreadPoolExecutor(max_workers=30) as executor:
         results.append(future.result())
 
 metadata = {
-    url: (desc, genre, cast, studios)
-    for url, desc, genre, cast, studios in results
+    url: (desc, genre, cast, studios) for url, desc, genre, cast, studios in results
 }
 
 df["Description"] = df["url"].map(lambda u: metadata[u][0])

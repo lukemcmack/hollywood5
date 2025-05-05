@@ -171,6 +171,7 @@ The model is configured with parameters, such as max_depth, min_samples_split, a
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 <b>Years Correctly Predicted: 0</b>
+
 <b>Average True Winner Probability: ~.01</b>
 
 Out of 11 years, the logistic regression model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
@@ -180,6 +181,7 @@ Out of 11 years, the logistic regression model predicted the Best Picture winner
 <h3>Embedding Model with Logistic Regression Classifier</h3>
 
 <b>Years Correctly Predicted: 2</b>
+
 <b>Average True Winner Probability: ~.15</b>
 
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
@@ -190,6 +192,7 @@ Out of 11 years, the embedding model predicted the Best Picture winner correctly
 <h3>Temporal-Weighted Naive Bayes</h3>
 
 <b>Years Correctly Predicted: 1</b>
+
 <b>Average True Winner Probability: ~.12</b>
 
 Out of 11 years, the Naive Bayes model correctly predicted the Best Picture winner in only 1 year (9% accuracy). The model uses a TF-IDF vectorizer and Multinomial Naive Bayes classifier to analyze review text written before the Oscar ceremony. While it integrates sentiment features, the model often failed to identify the actual winner even as a close runner-up. This suggests that important cues—such as cast, studio, or director mentions—may be highly predictive yet were deliberately excluded to reduce overfitting across years. As a result, the model may miss key year-specific context that shapes audience perceptions of Oscar-worthiness. Additionally, the model did better in early years and worse in later years, potentially suggesting that the exponential weight was less successful when comparing further apart years and that language style text is somewhat consistent.
@@ -199,11 +202,14 @@ Out of 11 years, the Naive Bayes model correctly predicted the Best Picture winn
 <h3>Neural Network</h3>
 
 <b>Years Correctly Predicted: 0</b>
+
+<b>Average True Winner Probability: ~.01</b>
 Out of 11 years, the Neural Network model correctly predicted the Best Picture in none of the years (0% accuracy). This was the worst performing model of the five and had a close to zero average accuracy.
 
 <h3>Gradient Boosting</h3>
 
 <b>Years Correctly Predicted: 3</b>
+
 <b>Average True Winner Probability: ~.28</b>
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.

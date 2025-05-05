@@ -115,7 +115,7 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 - Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
 - Review volume varies across films, especially in smaller or foreign-language categories.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
-- For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added. A longer dataset is available at <a href="https://utexas.app.box.com/s/b86722f1hoxeqy76dqw3ckfga09iqwfz/file/1853007371343" target="_blank">.
+- For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added. A longer dataset is available at [this Box link](https://utexas.app.box.com/s/b86722f1hoxeqy76dqw3ckfga09iqwfz/file/1853007371343).
 - Some Letterboxd reviews are likely trolls or unserious users who are not putting real reviews. Nothing was done to clean these potentially non-meaningful reviews.
 
 <h2 align="center">The Model(s)</h2>

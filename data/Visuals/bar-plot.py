@@ -11,7 +11,7 @@ models = [
     "Neural Network",
     "Gradient Boosting"
 ]
-correct_predictions = [0, 2, 1, 0, 3]
+correct_predictions = [1, 2, 1, 0, 3]
 
 # Create the bar chart
 fig, ax = plt.subplots(figsize=(10, 6))

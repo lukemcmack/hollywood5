@@ -225,12 +225,14 @@ These can be installed using pip (or pip3):
 pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 ```
 
-**Additional setup:**
+**Additional setup:**  
 To use `nltk`, you'll also need to download the relevant datasets:
+
 ```python
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
+
 
 ### Running the Models
 

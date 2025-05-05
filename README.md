@@ -90,7 +90,7 @@ In our model, we implemented a year-wise test-train split. Specifically, for eac
 
 This method reflects how predictions are made in practice. When predicting a future Oscar winner, we only have access to reviews and movies from other Oscar periods, and this approach aligns with that constraint. To that end, we also only use data from before the Oscar winners are announced, since reviews after the announcement may be fundamentally different than those before the announcement.
 
-We use a classification approach to predict whether each nominated film won the Best Picture Oscar. The model outputs a probability score for each film based on TF-IDF features from review text, normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
+Probabilities are normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
 
 <h3>Stop Words</h3>
 
@@ -128,6 +128,7 @@ In our context, movie reviews can contain complex patterns and nuance in languag
 
 The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
 
+In Gradient Boosting (and other models in our project), we use Scikit-learn’s <code>TfidfVectorizer</code>, which is equivalent to a combination of sklearns <code>CountVectorizer</code> and  <code>TfidfTransformer</code> (Inverse Document Frequency) transformer. First, it counts how often each word (or n-gram) appears in each review, then adjusts the counts by how common each word is across all reviews, reducing the weight of very common words that aren’t likely to be meaningful.
 
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 

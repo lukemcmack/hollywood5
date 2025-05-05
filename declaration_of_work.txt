@@ -1,0 +1,9 @@
+Orlando Di Leo: 
+
+Matias Ibarburu: 
+
+Luke McDonald: 
+
+Danny Urrutia: 
+
+Jisoo Yoo: Wrote code for scraping film metadata from Letterboxd.com, wrote code for combining data sets with reviews and metadata into one file, filtering both by language and time period, formatted code using black, contributed to the README

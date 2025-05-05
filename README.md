@@ -75,7 +75,7 @@ We use a classification approach to predict whether each nominated film won the 
 
 <h3>Stop Words</h3>
 
-<p>In building the text classification model, special attention was paid to the construction of the stop words list, which plays a critical role in filtering out non-informative tokens that could bias the results. We started with the standard set of English stop words provided by Natural Language toolkit (NLTK) and expanded it by incorporating specific terms from the dataset:
+<p>In building the text classification model, special attention was paid to the construction of the stop words list, which plays a critical role in filtering out non-informative tokens that could bias the results. We started with the standard set of English stop words provided by Natural Language toolkit (<code>NLTK</code>) and expanded it by incorporating specific terms from the dataset:
 <ul>
   <li>
     <strong>Film names were always excluded</strong> (i.e., always added to the stop words list) across all model specifications. This decision was made because film titles are likely to appear frequently in their own reviews, which could introduce strong but misleading signals about the outcome (i.e., whether the film won Best Picture). Removing these names helped prevent the model from by simply picking up title mentions rather than learning other patterns.

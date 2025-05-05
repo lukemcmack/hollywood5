@@ -151,11 +151,17 @@ Lastly, the resulting film-level embeddings are fed into a logistic regression c
 
 This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict OScar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews. 
 
+
 Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased. 
 
 Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words. 
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
+
+<h3>Neural Network</h3>
+
+This model implements a two layer neural network explained in Introduction to Statistical Learning. The reviews were cleaned from stopwords and formatted and then coded as a bag of words model with the top 500 words. The model was trained with a training set with all the movies in the years not used as the test year. The model was unable to predict correctly for any year.
+
 
 ---
 

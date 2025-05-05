@@ -90,7 +90,7 @@ In our model, we implemented a year-wise test-train split. Specifically, for eac
 
 This method reflects how predictions are made in practice. When predicting a future Oscar winner, we only have access to reviews and movies from other Oscar periods, and this approach aligns with that constraint. To that end, we also only use data from before the Oscar winners are announced, since reviews after the announcement may be fundamentally different than those before the announcement.
 
-We use a classification approach to predict whether each nominated film won the Best Picture Oscar. The model outputs a probability score for each film based on TF-IDF features from review text, normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
+Probabilities are normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
 
 <h3>Stop Words</h3>
 
@@ -120,6 +120,7 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 
 <h2 align="center">The Model(s)</h2>
 
+
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 Implements scikit-learn's CountVectorizer and LogisticRegressionCV to predict Academy Awards Best Picture winners based on Letterboxd text reviews. CountVectorizer transforms raw text into a matrix of token counts, creating columns for each unique word or phrase and recording how often it appears in each document. This model is also referred to as a Bag-of-Words model because we are collecting the word/phrase counts in no particular order. Since the Oscars are partially driven by subjective critical acclaim, a simple bag-of-words approach can offer a surprisingly strong baseline by capturing patterns in how reviewers describe the nominees.
@@ -142,11 +143,13 @@ Lastly, the resulting film-level embeddings are fed into a logistic regression c
 
 This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict OScar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews. 
 
+
 Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased. 
 
 Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words. 
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
+
 
 <h3>Gradient Boosting</h3>
 
@@ -187,13 +190,19 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 ---
 
 <h2 align="center"> Discussion </h2>
+=======
+Overall, each of our models provides only modest results. Our models capture what’s available in the text, but many of the true predictors of award success lie outside the scope of this data. Factors like industry politics, marketing campaigns, historical trends, and the preferences of Academy voters likely play a much bigger role than what’s said in public reviews. It's possible that reviews which are a proxy for the quality of a movie doesn't sway several academy voters, per the fact that <a href="https://www.npr.org/2025/04/22/nx-s1-5372650/oscar-voting-changes" target="_blank">Academy voters were not required to watch movies they are voting on until 2026</a>.
+
 
 ![Model Results Comparison](data/Visuals/model-success.png)
 
 The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
+Among our modest results, the <b>Gradient Boosting model</b> performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. When we vectorize the movie reviews, the resulting vector is a sparse and discontinuous; most words don’t appear in most reviews, which means there are a lot of zeros. This makes it difficult for simple models like logistic regression or NB, which expect smooth, linear patterns, to pick up on signals in the text.
 
-Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
+Gradient boosting models handle this much better through use of many smaller decision trees, it can find important words (or combinations of words) and adjust as it learns through iterations. These models are especially good at dealing with the discontinuous nature of text data where a few words or phrases may be most important and formatted in complicated, non-linear patterns, which could be why Gradient Boosting out performed other models. However it is also possible that the model became overtuned to our set over iterations.
+
+Interestingly, some consistencies popped up across models. For example 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
 
 ---
 
@@ -228,7 +237,7 @@ Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 A
 These can be installed using pip (or pip3):  
 
 ```bash
-pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
+pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm heapq unicodedata datetime pathlib collections ftfy threading concurrent.futures urllib.parse
 ```
 
 **Additional setup:**  
@@ -248,9 +257,15 @@ nltk.download('stopwords')
         Clone the repository to your local machine:
     </li>
     <li>
-        Download the cleaned dataset at this link:
+        Download the cleaned concatenated dataset at this link:
         <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
-            Download Dataset
+            Download Concatenated Dataset
+        </a> and save it in the folder 'Data'
+    </li>
+    <li>
+        Download the cleaned embedding dataset at this link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Embedding Dataset
         </a> and save it in the folder 'Data'
     </li>
 </ol>

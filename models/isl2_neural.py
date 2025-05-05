@@ -13,7 +13,8 @@ from pytorch_lightning.loggers import CSVLogger
 from pytorch_lightning import Trainer
 import torch.multiprocessing
 from torchinfo import summary
-
+from bow import preprocess, get_vocab
+# Function to create a tensor that has a binary value if the word is in the reviews
 def one_hot(sequences, ncol):
     idx, vals = [], []
     for i, s in enumerate(sequences):
@@ -75,7 +76,7 @@ def isl_neural(df_hw,year,words):
             return torch.flatten(val)
 
 
-    max_num_workers=0
+    max_num_workers=3
     lbxd_dm=SimpleDataModule(lbxd_train ,lbxd_test,num_workers =min(0,max_num_workers),batch_size =64)
     lbxd_model = LBXD(lbxd_test.tensors[0].size()[1])
     summary(lbxd_model ,input_size = lbxd_test.tensors[0].size(), col_names =['input_size','output_size','num_params'])
@@ -87,10 +88,39 @@ def isl_neural(df_hw,year,words):
     lbxd_trainer.fit(lbxd_module , datamodule =lbxd_dm)
 
     test_results=lbxd_trainer.test(lbxd_module , datamodule =lbxd_dm)
+    predictions = lbxd_trainer.predict(lbxd_module, datamodule=lbxd_dm)
+
+    
+    return predictions
+
+
+def yearly_neural(df,words):
+    year_dict = {} 
+    for year in df['Year Nominated'].unique():
+        predictions=isl_neural(df,year,words)
+        print(predictions)
+        a=predictions[0][0]
+        b=predictions[0][1]
+        probs = torch.sigmoid(a)
+        is_max = probs == torch.max(probs)
+        is_max_numeric = is_max.int() 
+        hit=torch.equal(is_max_numeric, b)
+        year_dict[year] =hit
+        print("For ",year,", The prediction is", hit)
+    return pd.DataFrame(year_dict) 
+
+
+        
 
 
 
-df_hw = pd.read_csv("data/best_picture_metadata_with_sampled_english_reviews.csv")
+
+
+
+
+
+
+
 
 
 

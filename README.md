@@ -167,11 +167,15 @@ Finally, the model also adjusts the weight of each word to avoid too high or ove
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
 
+![Gradient Boosting Results](data/Visuals/gboost.png)
+
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 <b>Years Correctly Predicted: 0</b>
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
+
+![Bag-of-Words Results](data/Visuals/bagofwords.png)
 
 <h3>Embedding Model with Logistic Regression Classifier</h3>
 
@@ -179,9 +183,14 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
 
+![Embedding Model Results](data/Visuals/embedding.png)
+
 ---
 
 <h2 align="center"> Discussion </h2>
+
+![Model Results Comparison](data/Visuals/model-success.png)
+
 The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
 

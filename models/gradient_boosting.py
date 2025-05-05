@@ -8,8 +8,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
 
-RANDOM_STATE = 42
-DATA_PATH = r'data\best_picture_metadata_with_sampled_english_reviews.csv'
+
+
 
 def load_and_preprocess_data(filepath):
     df = pd.read_csv(filepath)
@@ -74,9 +74,8 @@ def evaluate_year(test_year, df, review_vectorizer, clf):
     }
 
 
-def main():
-    df = load_and_preprocess_data(DATA_PATH)
-
+def gb_main(df):
+    RANDOM_STATE = 42
     required_columns = {"Film Name", "Year Nominated", "Won", "Review Text"}
     if not required_columns.issubset(df.columns):
         missing = required_columns - set(df.columns)

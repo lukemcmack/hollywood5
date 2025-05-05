@@ -10,8 +10,8 @@ import nltk
 from textblob import TextBlob
 
 # Configuration
-RANDOM_STATE = 42
-DATA_PATH = r'best_picture_metadata_with_sampled_english_reviews.csv'
+
+DATA_PATH = r'data\best_picture_metadata_with_sampled_english_reviews.csv'
 
 def load_and_preprocess_data(filepath):
     df = pd.read_csv(filepath)
@@ -109,8 +109,8 @@ def evaluate_year(test_year, df, review_vectorizer):
         'model': clf  # Return model for feature inspection
     }
 
-def main():
-      
+def weighted_naive_bayes(DATA_PATH):
+    RANDOM_STATE = 42
     df = load_and_preprocess_data(DATA_PATH)
     
     # Verify data
@@ -190,5 +190,6 @@ def main():
         for feat, score in top_features:
             print(f"{feat}: {score/len(models):.4f} (avg score)")
 
-if __name__ == "__main__":
-    main()
+
+
+

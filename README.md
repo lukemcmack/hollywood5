@@ -24,7 +24,7 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
 
-<h3 align="left">Collection Methodology</h3>
+<h3 align="left">Methodology</h3>
 
 <ol>
   <li>First, we scraped the nominees for Best Picture from 2015 to 2025 from the official Academy Awards website, encoding whether they won or not in our binary outcome variable. We also scraped the Oscars ceremony date for each year, so that we can filter out post-ceremony reviews later.</li>
@@ -41,7 +41,7 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   </div>
 </li>
 
-  <li>MODEL DESIGNERS EXPLAIN THE PROCESS HERE</li>
+  <li>To determine the best model for predicting the Acadamy Award for Best Picture, we used a leave-one-year-out approach from 2015 to 2024. Each year, we trained on the other years and predicted the winner from that year's nominees. Our main metric was the number of years where the model correctly identified the actual winner. Since only one nominee wins each year, we focused on correctly selecting that winner rather than overall classification performance.  </li>
 </ol>
 
 <h3>Limitations</h3>
@@ -56,6 +56,10 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 <h2 align="center">The Model(s)</h2>
 
 We use a classification approach to predict whether a nominated film won its Oscar. Initially, we apply NLP techniques to the review text and use classifiers such as a multilayer perceptron (MLP). The model learns patterns in both the language and numerical features of engagement.
+
+Logistic Regression Classifier with Text Tokenization
+To start, we merged all the individual English-language review documents for each film nominee to a single document separated by a space. This dataset is used for all models except the embedding model discussed below. This model uses 1-word and 2-word grams to tokenize the large aggregated review text. This choice came because we wanted to make sure to distinguish adding negative connotations to words such as "the acting was great" versus "the acting was not great". Another model choice was removing certain stop words. We used the default english stop words from scikitlearn CountVectorizer() along with some additional choice stop words including: film names, cast names, and studio names from all films in the dataset. This choice was made after initial results found many of the important features to be movie or actor names, which would not accurately predict the best movie for another year. A minimum number of token appearances was set to 10 to remove any words that do not appear frequently. Lastly, we used a logistic regression classifier using ridge regularization to weight the features.
+
 
 Future extensions will include experiments with:
 - TF-IDF vs. word embeddings

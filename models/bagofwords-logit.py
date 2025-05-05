@@ -1,10 +1,8 @@
 import pandas as pd
 import re
 import os
-from sklearn.metrics import classification_report, RocCurveDisplay, PrecisionRecallDisplay
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, classification_report
-from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import CountVectorizer
@@ -104,16 +102,8 @@ print(f"Correctly predicted winners in {correct_winners} of {len(years)} years")
 
 y_test_pred = model.predict(X_test)
 
-RocCurveDisplay.from_estimator(model, X_test, y=y_test)
-PrecisionRecallDisplay.from_estimator(model, X_test, y=y_test)
-
 print(classification_report(y_true=y_test, y_pred=y_test_pred))
 print()
-
-cm = confusion_matrix(y_test, y_test_pred)
-ConfusionMatrixDisplay(confusion_matrix=cm).plot(cmap="Blues")
-plt.title("Confusion Matrix")
-plt.show()
 
 test_df = test_df.copy() 
 test_df["Predicted Won"] = y_test_pred

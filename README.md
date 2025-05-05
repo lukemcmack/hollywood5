@@ -174,7 +174,7 @@ The model is configured with parameters, such as max_depth, min_samples_split, a
 
 <b>Average True Winner Probability: ~.01</b>
 
-Out of 11 years, the logistic regression model predicted the Best Picture winner correctly in 0 years (9% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
+Out of 11 years, the logistic regression model predicted the Best Picture winner correctly in 1 year (9% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
 
 ![Bag-of-Words Results](data/Visuals/bagofwords.png)
 

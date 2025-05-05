@@ -235,7 +235,7 @@ Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 A
 These can be installed using pip (or pip3):  
 
 ```bash
-pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
+pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm heapq unicodedata datetime pathlib collections ftfy threading concurrent.futures urllib.parse
 ```
 
 **Additional setup:**  

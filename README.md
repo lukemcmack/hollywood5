@@ -191,8 +191,6 @@ Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 A
 
 <h2 align="center">Reproducing the Results</h2>
 
-<h2 align="center">Reproducing the Results</h2>
-
 **The required Python packages are:**
 - **pandas** – for data manipulation and analysis  
 - **numpy** – for numerical computations  

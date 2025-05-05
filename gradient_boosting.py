@@ -3,14 +3,13 @@ import numpy as np
 import re
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.ensemble import GradientBoostingClassifier
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
 
 RANDOM_STATE = 42
-DATA_PATH = r'data/best_picture_metadata_with_reviews_filtered(1).csv'
+DATA_PATH = r'data\best_picture_metadata_with_sampled_english_reviews.csv'
 
 def load_and_preprocess_data(filepath):
     df = pd.read_csv(filepath)
@@ -50,7 +49,6 @@ def evaluate_year(test_year, df, review_vectorizer, clf):
     predicted_winner = sorted_df.iloc[0]
     actual_winner = sorted_df[sorted_df['Won'] == 1].iloc[0] if any(sorted_df['Won'] == 1) else None
 
-    acc = accuracy_score(y_test, y_pred)
     correct_winner = (actual_winner is not None and predicted_winner['Film Name'] == actual_winner['Film Name'])
 
     print(f'\n--- Probabilities for {test_year} ---')
@@ -62,9 +60,7 @@ def evaluate_year(test_year, df, review_vectorizer, clf):
         'actual_winner': actual_winner['Film Name'] if actual_winner is not None else None,
         'actual_prob': actual_winner['win_prob'] if actual_winner is not None else None,
         'predicted_winner': predicted_winner['Film Name'],
-        'accuracy': acc,
-        'correct_prediction': correct_winner,
-        'classification_report': classification_report(y_test, y_pred, output_dict=True)
+        'correct_prediction': correct_winner
     }
 
 def main():
@@ -78,14 +74,22 @@ def main():
     custom_stop_words = get_custom_stop_words(df)
 
     review_vectorizer = TfidfVectorizer(
-        max_features=1000,
+        max_features=5000,
         stop_words=custom_stop_words,
         ngram_range=(1, 2)
     )
 
-    clf = HistGradientBoostingClassifier(random_state=RANDOM_STATE, max_iter=200)
+    # Define the GradientBoostingClassifier with the best parameters
+    clf = GradientBoostingClassifier(
+        learning_rate=0.01,
+        max_depth=5,
+        min_samples_split=10,
+        n_estimators=100,
+        random_state=RANDOM_STATE
+    )
 
     results = []
+    feature_importances = []
 
     for test_year in sorted(df['Year Nominated'].unique()):
         print(f"\n=== Evaluating {test_year} ===")
@@ -97,12 +101,10 @@ def main():
         print(f"Correct prediction: {year_result['correct_prediction']}")
 
     results_df = pd.DataFrame(results)
-    avg_accuracy = results_df['accuracy'].mean()
     correct_winners = results_df['correct_prediction'].sum()
 
     print("\n=== Final Results ===")
     print(f"Correctly predicted winners in {correct_winners} of {len(results_df)} years")
-    print(f"Average binary classification accuracy: {avg_accuracy:.3f}")
 
     # Plot actual winners' predicted probabilities
     plt.figure(figsize=(10, 6))

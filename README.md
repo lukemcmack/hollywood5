@@ -24,6 +24,7 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   <li>Binary outcome (1 = winner, 0 = nominee that did not win)</li>
 </ul>
 
+
 <h3 align="left">Collection Methodology</h3>
 
 <ol>
@@ -46,6 +47,8 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h3>Limitations</h3>
 
+- Due to computing limitations, we restrict our analysis to only best-picture awards. Though the models in this analysis could be easily extended to target other categories as well.
+- Audience behavior may shift after nominations are announced, even before winners are revealed—introducing possible bias despite our review cutoff. We could implement some interaction term for reviews after to see if that helps our predicition at all.
 - Our models are limited to the random sample of reviews, for the purpose of making it reasonable to process our data. With more time, or a more powerful machine, we could take the entire data set at face value and perhaps construct a more accurate profile of the public perception of the films.
 - With our method, we do not take into account the sentiments of foreign-language reviewers, eliminating a significant (~30) percentage of our data set. Distinct national trends could affect the efficacy of our models.
 - Audience behavior may shift after nominations are announced, even before winners are revealed—introducing possible bias despite our review cutoff.
@@ -55,20 +58,29 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 
 <h2 align="center">The Model(s)</h2>
 
-We use a classification approach to predict whether a nominated film won its Oscar. Initially, we apply NLP techniques to the review text and use classifiers such as a multilayer perceptron (MLP). The model learns patterns in both the language and numerical features of engagement.
+<h3>Gradient Boosting</h3>
 
-Future extensions will include experiments with:
-- TF-IDF vs. word embeddings
-- Ensemble models (e.g. combining numeric + text pipelines)
-- Incorporating prior nomination history or director recognition
+Uses scikit learn's HistGradientBoostingClassifier to predict Best Picture winners based on text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
+
+In our context, movie reviews can contain complex patterns and nuance in language. Additionally, the structure or reviews can vary vastly between users. Thus Gradient Boosting is particularly effective in capturing these non-linear relationships in the data, allowing it to outperform simpler models like logistic regression.
+
+The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
+
+
 
 ---
 
-<h2 align="center">Results and Recommendations</h2>
+<h2 align="center">📊 Results </h2>
 
-Preliminary results show that language and fan engagement can help distinguish Oscar winners from other nominees. While our full metrics are still being finalized, early model accuracy and precision outperform basic baselines. Certain categories (e.g. Best Picture, Acting Awards) show stronger signals than others.
+<h3>Gradient Boosting</h3>
 
-We recommend future versions include historical Oscar trend features, more granular text sentiment scoring, and possibly external critic sources to supplement fan reviews.
+<b>Years Correctly Predicted: 3</b>
+
+Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
+
+---
+
+<h2 align="center"> Discussion </h2>
 
 ---
 

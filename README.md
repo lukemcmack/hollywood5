@@ -45,6 +45,16 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
   <li>MODEL DESIGNERS EXPLAIN THE PROCESS HERE</li>
 </ol>
 
+<h3>Test-Train Split methodology</h3>
+
+In our model, we implemented a year-wise test-train split. Specifically, for each year, we trained the model on data from all other years and tested it on the nominated films of the selected test year. This approach mimics the real-world scenario of predicting future outcomes, where data from future events (in this case, Oscar winners) is unavailable during training.
+
+This method reflects how predictions are made in practice. When predicting a future Oscar winner, we only have access to reviews and movies from other Oscar periods, and this approach aligns with that constraint. To that end, we also only use data from before the Oscar winners are announced, since reviews after the announcement may be fundamentally different than those before the announcement.
+
+We use a classification approach to predict whether each nominated film won the Best Picture Oscar. The model outputs a probability score for each film based on TF-IDF features from review text, normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
+
+<h3>Stop Words</h3>
+
 <h3>Limitations</h3>
 
 - Due to computing limitations, we restrict our analysis to only best-picture awards. Though the models in this analysis could be easily extended to target other categories as well.

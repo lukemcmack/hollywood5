@@ -151,11 +151,17 @@ Lastly, the resulting film-level embeddings are fed into a logistic regression c
 
 This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict OScar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews. 
 
+
 Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased. 
 
 Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words. 
 
 Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
+
+<h3>Neural Network</h3>
+
+This model implements a two layer neural network explained in Introduction to Statistical Learning. The reviews were cleaned from stopwords and formatted and then coded as a bag of words model with the top 500 words. The model was trained with a training set with all the movies in the years not used as the test year. The model was unable to predict correctly for any year.
+
 
 ---
 
@@ -167,11 +173,15 @@ Finally, the model also adjusts the weight of each word to avoid too high or ove
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
 
+![Gradient Boosting Results](data/Visuals/gboost.png)
+
 <h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
 <b>Years Correctly Predicted: 0</b>
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
+
+![Bag-of-Words Results](data/Visuals/bagofwords.png)
 
 <h3>Embedding Model with Logistic Regression Classifier</h3>
 
@@ -179,11 +189,18 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
 
+![Embedding Model Results](data/Visuals/embedding.png)
+
 ---
 
 <h2 align="center"> Discussion </h2>
+=======
 Overall, each of our models provides only modest results. Our models capture what’s available in the text, but many of the true predictors of award success lie outside the scope of this data. Factors like industry politics, marketing campaigns, historical trends, and the preferences of Academy voters likely play a much bigger role than what’s said in public reviews. It's possible that reviews which are a proxy for the quality of a movie doesn't sway several academy voters, per the fact that <a href="https://www.npr.org/2025/04/22/nx-s1-5372650/oscar-voting-changes" target="_blank">Academy voters were not required to watch movies they are voting on until 2026</a>.
 
+
+![Model Results Comparison](data/Visuals/model-success.png)
+
+The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
 Among our modest results, the <b>Gradient Boosting model</b> performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. When we vectorize the movie reviews, the resulting vector is a sparse and discontinuous; most words don’t appear in most reviews, which means there are a lot of zeros. This makes it difficult for simple models like logistic regression or NB, which expect smooth, linear patterns, to pick up on signals in the text.
 
@@ -224,7 +241,7 @@ Interestingly, some consistencies popped up across models. For example 4 out of 
 These can be installed using pip (or pip3):  
 
 ```bash
-pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
+pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm heapq unicodedata datetime pathlib collections ftfy threading concurrent.futures urllib.parse
 ```
 
 **Additional setup:**  

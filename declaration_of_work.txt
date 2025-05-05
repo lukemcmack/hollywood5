@@ -1,8 +1,8 @@
-Orlando Di Leo: 
+Orlando Di Leo: implemented code for the Bag-of-Words and Embedding models, helped with dataset creation by finding nomination announcement dates and ceremony dates, contributed to the README
 
 Matias Ibarburu: 
 
-Luke McDonald: Wrote code for scarping film reviews, wrote code for testing URLs, wrote starter code for test train split approach, wrote code for gradient boosting, contributed to README, cleaned scraping files
+Luke McDonald: Wrote code for scraping film reviews, wrote code for testing URLs, wrote starter code for test train split approach, wrote code for gradient boosting, contributed to README, cleaned scraping files
 
 Danny Urrutia: 
 

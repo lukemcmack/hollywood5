@@ -182,10 +182,13 @@ Out of 11 years, the embedding model predicted the Best Picture winner correctly
 ---
 
 <h2 align="center"> Discussion </h2>
-The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
+Overall, each of our models provides only modest results. Our models capture what’s available in the text, but many of the true predictors of award success lie outside the scope of this data. Factors like industry politics, marketing campaigns, historical trends, and the preferences of Academy voters likely play a much bigger role than what’s said in public reviews. It's possible that reviews which are a proxy for the quality of a movie doesn't sway several academy voters, per the fact that <a href="https://www.npr.org/2025/04/22/nx-s1-5372650/oscar-voting-changes" target="_blank">Academy voters were not required to watch movies they are voting on until 2026</a>.
 
+The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. When we vectorize the movie reviews, the resulting vector is a sparse and discontinuous; most words don’t appear in most reviews, which means there are a lot of zeros. This makes it difficult for simple models like logistic regression or NB, which expect smooth, linear patterns, to pick up on signals in the text.
 
-Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
+Gradient boosting models handle this much better through use of many smaller decision trees, it can find important words (or combinations of words) and adjust as it learns through iterations. These models are especially good at dealing with the discontinuous nature of text data where a few words or phrases may be most important and formatted in complicated, non-linear patterns, which could be why Gradient Boosting out performed other models. However it is also possible that the model became overtuned to our set over iterations.
+
+Interestingly, some consistencies popped up across models. For example 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
 
 ---
 
@@ -240,9 +243,15 @@ nltk.download('stopwords')
         Clone the repository to your local machine:
     </li>
     <li>
-        Download the cleaned dataset at this link:
+        Download the cleaned concatenated dataset at this link:
         <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
-            Download Dataset
+            Download Concatenated Dataset
+        </a> and save it in the folder 'Data'
+    </li>
+    <li>
+        Download the cleaned embedding dataset at this link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Embedding Dataset
         </a> and save it in the folder 'Data'
     </li>
 </ol>

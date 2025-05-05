@@ -7,6 +7,25 @@
 Our goal is to build a model that predicts whether an Oscar-nominated film will win Best Picture based on audience sentiment and engagement. We use data from Letterboxd reviews to extract patterns in how viewers talk about nominated films. The hypothesis is that emotional tone, review volume, and fan engagement — combined with basic film metadata — can reveal subtle signals that align with Oscar outcomes. By focusing on reviews published only before each year's ceremony, we aim to simulate a real-world prediction setting.
 </p>
 
+<h2 align="center">Goal</h2>
+
+We aim to predict which film will win Best Picture based on review text. For each Oscar year, we output a probability for each nominee and identify the predicted winner as the film with the highest probability in its pool.
+
+<h3>Target Metrics</h3>
+<b>Average probability of the actual winner</b>
+How strongly the model “believes” in the true winner, even if it doesn't place it first. This reflects whether the model is reasonably calibrated or just totally missing the signal. If the winner always gets 0.20 probability out of 5 films, that’s weak; if it often gets 0.60+, it’s much better.
+
+<b>Winner correctly predicted (top-ranked)</b>
+Whether the model actually picks the correct film as the most likely winner—our main goal from a practical standpoint. Even if a model assigns high probability to the right movie, it’s a fail if another film edges it out every time.
+
+<b>Why these over ROC/AUC?</b>
+ROC curves and AUC are useful for binary classification problems across many thresholds, however in this context they are not as effective:
+- The competition is within each year’s nominee pool, not across all films globally.
+- ROC/AUC assume a global positive vs. negative class structure, but we are predicting a winner among multiple nominees in a single year—a mutually exclusive choice.
+- Even strong ROC scores wouldn't guarantee you pick the actual winner in a given year; it might just mean we consistently rank winners slightly higher overall.
+
+Thus, our metrics are tailored to finding confidence in and predicting the correct winner accross years.
+
 ---
 
 <h2 align="center">The Data</h2>

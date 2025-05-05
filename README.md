@@ -85,10 +85,10 @@ We use a classification approach to predict whether each nominated film won the 
 <h3>Rationale:</h3>
 <ul>
   <li>
-    <strong>Film names were always excluded (i.e., always added to the stop words list)</strong> across all model specifications. This decision was made because film titles are likely to appear frequently in their own reviews, which could introduce strong but misleading signals about the outcome (i.e., whether the film won Best Picture). Removing these names helped prevent the model from by simply picking up title mentions rather than learning other patterns.
+    <strong>Film names were always excluded</strong> (i.e., always added to the stop words list) across all model specifications. This decision was made because film titles are likely to appear frequently in their own reviews, which could introduce strong but misleading signals about the outcome (i.e., whether the film won Best Picture). Removing these names helped prevent the model from by simply picking up title mentions rather than learning other patterns.
   </li>
   <li>
-    <strong>Cast members and studios were tested more experimentally.</strong> We explored different stop word configurations to assess whether including or excluding these names would improve performance. These were included or excluded on a per-model basis.
+    <strong>Cast members and studios were testedexperimentally.</strong> We explored different stop word configurations to assess whether including or excluding these names would improve performance. These were included or excluded on a per-model basis.
   </li>
 </ul>
 

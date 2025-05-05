@@ -35,6 +35,23 @@ Thus, our metrics are tailored to finding confidence in and predicting the corre
 - Our **Oscars award data** was manually compiled from the <a href="https://www.oscars.org">official Academy Awards website</a> for the years 2015-2025, which records the title of each nominee and the eventual winners.
 - The **Viewer reviews and film metadata** were scraped from <a href="https://letterboxd.com/films/">Letterboxd.com</a>, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
 
+<h3>Data Access</h3>
+
+<ul>
+    <li>
+        The dataset used for training and evaluation (required to run models) can be downloaded from this Box link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Dataset
+        </a>.
+    </li>
+    <li>
+        The full dataset of all scraped reviews (not required to run the models) is available here:
+        <a href="https://utexas.box.com/shared/static/13d76lq4iju268a2pcxprd3wrljtok5k.csv" target="_blank">
+            Download Full Review Data
+        </a>.
+    </li>
+</ul>
+
 <h3 align="left">Features</h3>
 <ul>
   <li>Description and genre of film, taken from Letterboxd</li>
@@ -162,4 +179,14 @@ pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 ```
 
 ### Running the Models
+
+
+<ol>
+    <li>
+        First, download the cleaned dataset at this link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Dataset
+        </a>.
+    </li>
+</ol>
 

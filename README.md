@@ -53,8 +53,6 @@ Our goal is to build a model that predicts whether an Oscar-nominated film will 
 - Review volume varies across films, especially in smaller or foreign-language categories.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
 
----
-
 <h2 align="center">The Model(s)</h2>
 
 We use a classification approach to predict whether a nominated film won its Oscar. Initially, we apply NLP techniques to the review text and use classifiers such as a multilayer perceptron (MLP). The model learns patterns in both the language and numerical features of engagement.
@@ -85,6 +83,11 @@ We recommend future versions include historical Oscar trend features, more granu
 - **swifter** - for efficiently applying functions to a pandas dataframe
 - **tqdm** - for tracking the progress of any number of processes
 
-To reproduce the results:
-1. Clone the repository.
-2. Install dependencies from `requirements.txt`.
+These can be installed using pip (or pip3):  
+
+```bash
+pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
+```
+
+### Running the Models
+

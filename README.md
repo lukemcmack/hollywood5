@@ -1,4 +1,4 @@
-<h1 align="center">Hollywood 5 (potentially CineClassifiers or Film Forecasters or Red Carpet Recommenders? eh? eh? get it?)</h1>
+<h1 align="center">Hollywood 5</h1>
 <h2 align="center">By Orlando Di Leo, Matias Ibarburu, Luke McDonald, Daniel Urrutia, Jisoo Yoo</h2>
 <p align="center"> <img src="https://hips.hearstapps.com/hmg-prod/images/overview-of-the-oscar-statue-at-meet-the-oscars-at-the-time-news-photo-1588178852.jpg" alt="An image of an Oscar trophy." width="500"> </p>
 <h2 align="center">Project Description</h2>
@@ -80,7 +80,10 @@ We recommend future versions include historical Oscar trend features, more granu
 - **pandas** – for data manipulation and analysis  
 - **requests** – for making HTTP requests to fetch web pages  
 - **beautifulsoup** – for parsing HTML and extracting data from web pages  
-- **scikit-learn** – for machine learning models and data preprocessing  
+- **scikit-learn** – for machine learning models and data preprocessing
+- **langdetect** - for identifying the language of film reviews
+- **swifter** - for efficiently applying functions to a pandas dataframe
+- **tqdm** - for tracking the progress of any number of processes
 
 To reproduce the results:
 1. Clone the repository.

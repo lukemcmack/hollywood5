@@ -13,7 +13,7 @@ We aim to predict which film will win Best Picture based on review text. For eac
 
 <h3>Target Metrics</h3>
 <b>Average probability of the actual winner</b>
-How strongly the model “believes” in the true winner, even if it doesn't place it first. This reflects whether the model is reasonably calibrated or receiving weak signals. If the winner always gets 0.10 probability out of 10 films, that’s weak; if it often gets 0.60+, that is better.
+How strongly the model “believes” in the true winner, even if it doesn't place it first. If the winner always gets 0.10 probability out of 10 films, that’s weak; if it often gets 0.60+, that is better.
 
 <b>Winner correctly predicted (top-ranked)</b>
 Whether the model actually picks the correct film as the most likely winner; our main goal from a practical standpoint. Even if a model assigns high probability to the right movie, it will not get chosen as the predicted winner if another film edges it out every time.
@@ -34,7 +34,24 @@ Thus, our metrics are tailored to finding confidence in and predicting the corre
 
 - Our **Oscars award data** was manually compiled from the <a href="https://www.oscars.org">official Academy Awards website</a> for the years 2015-2025, which records the title of each nominee and the eventual winners.
 - The **Viewer reviews and film metadata** were scraped from <a href="https://letterboxd.com/films/">Letterboxd.com</a>, a film-reviewing site similar to Goodreads. It also has an info page for each film with metadata that we scraped and compiled.
----
+
+<h3>Data Access</h3>
+
+<ul>
+    <li>
+        The dataset used for training and evaluation (required to run models) can be downloaded from this Box link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Dataset
+        </a>.
+    </li>
+    <li>
+        The full dataset of all scraped reviews (not required to run the models) is available here:
+        <a href="https://utexas.box.com/shared/static/13d76lq4iju268a2pcxprd3wrljtok5k.csv" target="_blank">
+            Download Full Review Data
+        </a>.
+    </li>
+</ul>
+
 <h3 align="left">Features</h3>
 <ul>
   <li>Description and genre of film, taken from Letterboxd</li>
@@ -74,6 +91,17 @@ This method reflects how predictions are made in practice. When predicting a fut
 We use a classification approach to predict whether each nominated film won the Best Picture Oscar. The model outputs a probability score for each film based on TF-IDF features from review text, normalized within each year so that the total probability across all nominees in a given year sums to 1. The predicted winner is the film with the highest probability in that year’s nominee pool.
 
 <h3>Stop Words</h3>
+
+<p>In building the text classification model, special attention was paid to the construction of the stop words list, which plays a critical role in filtering out non-informative tokens that could bias the results. We started with the standard set of English stop words provided by <strong>Natural Language Toolkit</strong> (<code>NLTK</code>) and expanded it by incorporating specific terms from the dataset:
+<ul>
+  <li>
+    <strong>Film names were always excluded</strong> (i.e., always added to the stop words list) across all model specifications. This decision was made because film titles are likely to appear frequently in their own reviews, which could introduce strong but misleading signals about the outcome (i.e., whether the film won Best Picture). Removing these names helped prevent the model from by simply picking up title mentions rather than learning other patterns.
+  </li>
+  <li>
+    <strong>Cast members and studios were tested experimentally.</strong> We explored different stop word configurations to assess whether including or excluding these names would improve performance. These were included or excluded on a per-model basis.
+  </li>
+</ul>
+It is worth noting that while excluding film names helped avoid overfitting to title mentions, this approach may also have <strong>limited the model’s ability to detect meaningful comparisons across films</strong>. For example, reviews that favorably compare one film to another might lose critical context if both film names are removed. This trade-off between reducing noise and preserving valuable comparative signals was an important part of our modeling choices.
 
 <h3>Limitations</h3>
 
@@ -151,4 +179,16 @@ pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 ```
 
 ### Running the Models
+
+<ol>
+    <li>
+        Clone the repository to your local machine:
+    </li>
+    <li>
+        Download the cleaned dataset at this link:
+        <a href="https://utexas.box.com/s/3dqb178rcmvwobr9u0j7ydg89h0op5hy" target="_blank">
+            Download Dataset
+        </a> and save it in the folder 'Data'
+    </li>
+</ol>
 

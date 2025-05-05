@@ -232,6 +232,7 @@ To use `nltk`, you'll also need to download the relevant datasets:
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
+```
 
 
 ### Running the Models

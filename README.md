@@ -177,6 +177,12 @@ Out of 11 years, the Gradient Boosting model predicted the Best Picture winner c
 
 Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
 
+![Temporal-Weighted Naive Bayes Results](data/Visuals/temporal_weighted_naive_bayes_predictions_graph.png)
+
+<h3>Temporal-Weighted Naive Bayes</h3>
+
+Out of 11 years, the Naive Bayes model correctly predicted the Best Picture winner in only 1 year (9% accuracy). The model uses a TF-IDF vectorizer and Multinomial Naive Bayes classifier to analyze review text written before the Oscar ceremony. While it integrates sentiment features, the model often failed to identify the actual winner even as a close runner-up. This suggests that important cues—such as cast, studio, or director mentions—may be highly predictive yet were deliberately excluded to reduce overfitting across years. As a result, the model may miss key year-specific context that shapes audience perceptions of Oscar-worthiness.
+
 ![Embedding Model Results](data/Visuals/embedding.png)
 
 <h3>Gradient Boosting</h3>

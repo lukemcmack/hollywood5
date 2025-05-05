@@ -1,11 +1,12 @@
 import pandas as pd
 import numpy as np
+import os
 from sentence_transformers import SentenceTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("data/bp_embedding_data_100.csv")
+df = pd.read_csv(os.path.join("data", "bp_embedding_data_100.csv"))
 model = SentenceTransformer("all-MiniLM-L12-v2")
 
 print("Encoding all reviews...")

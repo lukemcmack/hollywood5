@@ -52,6 +52,8 @@ Thus, our metrics are tailored to finding confidence in and predicting the corre
     </li>
 </ul>
 
+Please contact the authors for any issues with data retrieval. The data is not uploaded to the repository due to size constraints (>100Mb).
+
 <h3 align="left">Features</h3>
 <ul>
   <li>Description and genre of film, taken from Letterboxd</li>
@@ -113,7 +115,7 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 - Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
 - Review volume varies across films, especially in smaller or foreign-language categories.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
-- For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added.
+- For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added. A longer dataset is available at [this Box link](https://utexas.app.box.com/s/b86722f1hoxeqy76dqw3ckfga09iqwfz/file/1853007371343).
 - Some Letterboxd reviews are likely trolls or unserious users who are not putting real reviews. Nothing was done to clean these potentially non-meaningful reviews.
 
 <h2 align="center">The Model(s)</h2>
@@ -180,8 +182,10 @@ Out of 11 years, the embedding model predicted the Best Picture winner correctly
 ---
 
 <h2 align="center"> Discussion </h2>
+The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
-Interestingly, all of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. 
+
+Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
 
 ---
 
@@ -189,18 +193,45 @@ Interestingly, all of our models predicted the Revenant to win the 2016 Academy 
 
 **The required Python packages are:**
 - **pandas** – for data manipulation and analysis  
+- **numpy** – for numerical computations  
 - **requests** – for making HTTP requests to fetch web pages  
-- **beautifulsoup** – for parsing HTML and extracting data from web pages  
-- **scikit-learn** – for machine learning models and data preprocessing
-- **langdetect** - for identifying the language of film reviews
-- **swifter** - for efficiently applying functions to a pandas dataframe
-- **tqdm** - for tracking the progress of any number of processes
+- **beautifulsoup4** – for parsing HTML and extracting data from web pages  
+- **scikit-learn** – for modeling and data preprocessing  
+- **nltk** – for natural language processing tasks like tokenization and stop word removal  
+- **sentence-transformers** – for generating semantic embeddings from text reviews  
+- **matplotlib** – for creating visualizations  
+- **langdetect** – for identifying the language of film reviews  
+- **swifter** – for efficiently applying functions to a pandas DataFrame  
+- **tqdm** – for tracking the progress of any number of processes  
+- **re** – for working with regular expressions and text cleaning  
+- **os** – for interacting with the operating system and handling file paths  
+- **heapq** – for efficient heap queue operations  
+- **unicodedata** – for normalizing and cleaning Unicode text  
+- **string** – for string constants and text processing utilities  
+- **datetime** – for handling and formatting date and time information  
+- **pathlib** – for working with and navigating file system paths  
+- **collections** – for specialized data structures like defaultdict  
+- **csv** – for reading and writing CSV files  
+- **ftfy** – for fixing Unicode errors and messy text in scraped reviews  
+- **threading** – for multi-threaded execution  
+- **concurrent.futures** – for parallelizing tasks across multiple threads  
+- **urllib.parse** – for parsing and manipulating URLs
 
 These can be installed using pip (or pip3):  
 
 ```bash
 pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 ```
+
+**Additional setup:**  
+To use `nltk`, you'll also need to download the relevant datasets:
+
+```python
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+```
+
 
 ### Running the Models
 

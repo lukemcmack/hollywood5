@@ -4,7 +4,6 @@ from ftfy import fix_text
 import pandas as pd
 import re
 import time
-import random
 import unicodedata
 import os
 

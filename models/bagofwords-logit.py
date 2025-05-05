@@ -1,29 +1,20 @@
 import pandas as pd
-import numpy as np
 import re
-
-from sklearn.model_selection import train_test_split
-
+import os
 from sklearn.metrics import classification_report, RocCurveDisplay, PrecisionRecallDisplay
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.metrics import ConfusionMatrixDisplay
-
-from sklearn.preprocessing import StandardScaler
-
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
-
+from sklearn.linear_model import LogisticRegressionCV
 from sklearn.pipeline import make_pipeline
-
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-
+from sklearn.feature_extraction.text import CountVectorizer
 import matplotlib.pyplot as plt
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import nltk
 nltk.download("punkt")
 
+df = pd.read_csv(os.path.join("data", "best_picture_metadata_with_sampled_english_reviews.csv"))
 
 def evaluate_year(test_year, df, model):
     """Evaluate performance for a specific test year"""
@@ -35,20 +26,16 @@ def evaluate_year(test_year, df, model):
     X_test = df[test_mask]["Review Text"].fillna("")
     y_test = df[test_mask]['Won']
     
-    # Train model
     model.fit(X_train, y_train)
     
-    # Predict
     y_pred = model.predict(X_test)
     y_prob = model.predict_proba(X_test)[:, 1]
     
-    # Get predicted and actual winners
     test_df = df[test_mask].copy()
     test_df['win_prob'] = y_prob
     predicted_winner = test_df.loc[test_df['win_prob'].idxmax()]
     actual_winner = test_df[test_df['Won'] == 1].iloc[0] if any(test_df['Won'] == 1) else None
     
-    # Calculate metrics
     acc = accuracy_score(y_test, y_pred)
     correct_winner = (actual_winner is not None and 
                      predicted_winner.name == actual_winner.name)
@@ -64,28 +51,22 @@ def evaluate_year(test_year, df, model):
 
 def get_custom_stop_words(df):
     """Create comprehensive stop words list including film names, cast, studios"""
-    # Basic English stop words
     stop_words = set(stopwords.words('english'))
     
-    # Add film names
     for film in df['Film Name'].unique():
         words = word_tokenize(re.sub(r'[^\w\s]', '', film.lower()))
         stop_words.update(words)
     
-    # Add cast members
     for cast_str in df['Cast'].dropna():
         for actor in cast_str.split(','):
             words = word_tokenize(re.sub(r'[^\w\s]', '', actor.strip().lower()))
             stop_words.update(words)
     
-    # Add studios
     for studio in df['Studios'].dropna().unique():
         words = word_tokenize(re.sub(r'[^\w\s]', '', studio.lower()))
         stop_words.update(words)
     
     return list(stop_words)
-
-df = pd.read_csv("data/best_picture_metadata_with_sampled_english_reviews.csv")
 
 years = sorted(df['Year Nominated'].unique())
 results = []
@@ -96,10 +77,10 @@ model = make_pipeline(
         lowercase=True,
         strip_accents="unicode",
         stop_words=custom_stop_words,
-        ngram_range=(1, 2),  # This sets unigrams and bigrams
+        ngram_range=(1, 2),
         min_df= 10
     ),
-    LogisticRegressionCV(max_iter=1000)  # Uses ridge (L2) regularization by default
+    LogisticRegressionCV(max_iter=1000)
 )
 
 

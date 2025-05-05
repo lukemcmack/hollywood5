@@ -5,6 +5,9 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 import unicodedata
 import threading
+import os
+
+"""This file is not required for scraping, but is useful to see if your urls are pointing correctly quickly"""
 
 print_lock = threading.Lock()
 
@@ -140,6 +143,6 @@ def process_movies(
 
 if __name__ == "__main__":
     process_movies(
-        input_csv="OscarWinners.csv",
+        input_csv = os.path.join("data", "OscarWinners.csv"),
         output_csv="letterboxd_urls.csv",
     )

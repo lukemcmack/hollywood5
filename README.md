@@ -52,6 +52,8 @@ Thus, our metrics are tailored to finding confidence in and predicting the corre
     </li>
 </ul>
 
+Please contact the authors for any issues with data retrieval. The data is not uploaded to the repository due to size constraints (>100Mb).
+
 <h3 align="left">Features</h3>
 <ul>
   <li>Description and genre of film, taken from Letterboxd</li>
@@ -113,40 +115,53 @@ It is worth noting that while excluding film names helped avoid overfitting to t
 - Letterboxd skews toward younger, internet-savvy users and may not reflect Academy preferences.
 - Review volume varies across films, especially in smaller or foreign-language categories.
 - NLP models may misinterpret sarcasm, humor, or inside references common in user-generated reviews.
+- For the embedding model, we are only using 100 reviews per movie for processing time reasons. While there is more data available, it could take several hours to run each model as more reviews are added. A longer dataset is available at [this Box link](https://utexas.app.box.com/s/b86722f1hoxeqy76dqw3ckfga09iqwfz/file/1853007371343).
+- Some Letterboxd reviews are likely trolls or unserious users who are not putting real reviews. Nothing was done to clean these potentially non-meaningful reviews.
 
 <h2 align="center">The Model(s)</h2>
 
 <h3>Gradient Boosting</h3>
 
-Uses scikit learn's GradientBoostingClassifier to predict Best Picture winners based on text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
+Implements scikit learn's GradientBoostingClassifier to predict Best Picture winners based on Letterboxd text reviews. Gradient boosting builds a sequence of shallow decision trees, where each new tree tries to correct the mistakes of the previous ones. This approach is well-suited to high-dimensional data (thousands of text features) and can identify subtle signals in review language—such as combinations of words or phrases that may indicate stronger Oscar prospects.
 
 In our context, movie reviews can contain complex patterns and nuance in language. Additionally, the structure or reviews can vary vastly between users. Thus Gradient Boosting is particularly effective in capturing these non-linear relationships in the data, allowing it to outperform simpler models like logistic regression.
 
 The model is configured with parameters, such as max_depth, min_samples_split, and learning_rate, which help prevent overfitting. GridSerachCV was used to optimize hyperparameters, then best parameters were manually inserted into the model for ease of running. These hyperparameters are particularly useful in this context, where the dataset may contain high-dimensional features (e.g., words in reviews) that could lead to overfitting in simpler models. However, it is still prone to overfitting in our setting since there are not that many target years, even though there are many features (words).
 
 
-<h3>Text Tokenization with Logistic Regression Classifier</h3>
+<h3>Bag-of-Words with Logistic Regression Classifier</h3>
 
-This model implements scikitlearn's CountVectorizer and LogisticRegressionCV.
+Implements scikit-learn's CountVectorizer and LogisticRegressionCV to predict Academy Awards Best Picture winners based on Letterboxd text reviews. CountVectorizer transforms raw text into a matrix of token counts, creating columns for each unique word or phrase and recording how often it appears in each document. This model is also referred to as a Bag-of-Words model because we are collecting the word/phrase counts in no particular order. Since the Oscars are partially driven by subjective critical acclaim, a simple bag-of-words approach can offer a surprisingly strong baseline by capturing patterns in how reviewers describe the nominees.
 
-To start, we merged all the individual English-language review documents for each film nominee to a single document separated by a space. This dataset is used for all models except the embedding model discussed below. This model uses 1-word and 2-word grams to tokenize the large aggregated review text. This choice came because we wanted to make sure to distinguish adding negative connotations to words such as "the acting was great" versus "the acting was not great". 
+To prepare the input, we merged all English-language reviews for each film nominee into a single document, separating individual reviews with spaces. This aggregated text format was used for all models except the embedding model discussed below. We configured CountVectorizer to extract both unigrams (1-word tokens) and bigrams (2-word tokens) to better capture simple sentiment structures—e.g., distinguishing "the acting was great" from "the acting was not great".
 
-Another model choice was removing certain stop words. We used the default english stop words from scikitlearn CountVectorizer() along with some additional choice stop words including: film names, cast names, and studio names from all films in the dataset. This choice was made after initial results found many of the important features to be movie or actor names, which would not accurately predict the best movie for another year. A minimum number of token appearances was set to 10 to remove any words that do not appear frequently. Lastly, we used a logistic regression classifier using ridge regularization to weight the features.
+Another model choice was removing certain stop words. In this model, we used the default english stop words from scikitlearn CountVectorizer along with some additional choice stop words including: film names, cast names, and studio names from all films in the dataset. This choice was made after initial results found many of the important features to be movie or actor names, which would not accurately predict the best movie for another year. A minimum number of token appearances was set to 10 to remove any words that do not appear frequently. Lastly, the model uses a logistic regression classifier using ridge regularization to weight each of the features. LogisticRegressionCV automatically performs cross-validation to select the optimal regularization strength. This helps prevent overfitting by penalizing large coefficients.
 
-<h3>Embedding Model</h3>
+<h3>Embedding Model with Logistic Regression Classifier</h3>
 
-This model implements SentenceTransformer's FINISH WRITEUP
+Implements SentenceTransformers' all-MiniLM-L12-v2 pretrained embedding model to predict Academy Awards Best Picture winners based on Letterboxd text reviews. This transformer-based model is pretrained on billions of sentences, making it well-suited to capturing semantic meaning in movie reviews. Instead of treating reviews as a bags of words, the model generates  vector representations (embeddings) to reflect the contextual meaning of each review.
+
+Each individual review is passed through the embedding model to produce a fixed-length vector. We then aggregate these review-level vectors for each film by taking their mean, resulting in a single semantic embedding per nominee. This aggregation helps summarize the overall sentiment and thematic content of a film’s reviews in a compact form.
+
+Unlike the CountVectorizer approach, this method requires keeping reviews separate before embedding, since averaging already-merged text would distort individual sentiment signals. As such, the input data for this model maintains one row per review. For processing reasons, we limit the data to 100 reviews per movie.
+
+Lastly, the resulting film-level embeddings are fed into a logistic regression classifier with ridge regularization. LogisticRegressionCV performs cross-validation to automatically select the optimal strength of regularization. This helps control for overfitting by shrinking less important feature weights toward zero, improving the model’s generalization to other Oscar years.
+
+<h3>Temporal-Weighted Naive Bayes</h3>
+
+This model predicts Best Picture winners using Tfidf Vectorizer and Multinomial Naive Bayes. The TFIDF vector converts the metadata of all reviews into numerical count to predict OScar nominee awards based on common words. However, we use stopwords to avoid words from the title of the movie or some generic words to avoid overfitting or overgeneralizing words that would be included in reviews. 
+
+
+Additionally, we weight training examples using a temporal decay factor to give slightly more emphasis to years closer to the test year. This ensures predictions are informed by recent language trends while still generalizing across the 2015–2025 period. While extending stopwords to the studio or cast names may also help, since the year of nomination is excluded in this model, it is unlikely that the same cast names would be in future or past movies' reviews, and might instead be helpful. Initial trials of the model supported this theory as prediction accuracy decreased. 
+
+Since reviews can vary in tone and depth, we were able to utilize Textblob, which is a python package with a built-in dictionary with predefined sentiment scores (scores about positive or negative feelings) and subjectivity (how differently opinionated a review is relative to other reviews). This allowed us to boost or reduce the model's predicted win probabilities as reviews got more positive and subjective (analyzing words like "amazing" or "terrible"). Additionally, setting the function for adding sentiment "grams" to have groupings allowed us to look at nearby words that are useful, like "not" or "very" before or after key words. 
+
+Finally, the model also adjusts the weight of each word to avoid too high or overconfidence of a predictor word. By using Naive Bayes with filters, we focus on words said in at least 5 movie reviews (avoid too rare of words or misspelled words) and words said in over 70% of reviews (too common or not clear words). Additionally, the model normalizes probability so that all probabilities of available movies sum to 1, including a step that prevents the probability of each word occuring from equalling zero (artificially adding a tiny ocurrence of 0.1). That way, the proportion of each words uniqueness is lower.
 
 <h3>Neural Network</h3>
 
-This model implements a Neural 
+This model implements a two layer neural network explained in Introduction to Statistical Learning. The reviews were cleaned from stopwords and formatted and then coded as a bag of words model with the top 500 words. The model was trained with a training set with all the movies in the years not used as the test year. The model was unable to predict correctly for any year.
 
-
-
-Future extensions will include experiments with:
-- TF-IDF vs. word embeddings
-- Ensemble models (e.g. combining numeric + text pipelines)
-- Incorporating prior nomination history or director recognition
 
 ---
 
@@ -158,11 +173,25 @@ Future extensions will include experiments with:
 
 Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 3 years (27% accuracy). Even in years it missed the winner, the model still ranked the correct film within the top 3 contenders 4 of the remaining 8 years. While the exact prediction rate was modest, the model was consistently able to highlight strong candidates, offering valuable insights into potential Oscar winners.
 
+<h3>Bag-of-Words with Logistic Regression Classifier</h3>
+
+<b>Years Correctly Predicted: 0</b>
+
+Out of 11 years, the Gradient Boosting model predicted the Best Picture winner correctly in 0 years (0% accuracy). The basic Bag-of-Words model appears to struggle in predicting correct winners. This could be because commonly used words in Letterboxd reviews for one year of nominees could be vastly different than other years. Therefore, a simple count aggregation of words is not enough to explain why a certain movie won in a given year.
+
+<h3>Embedding Model with Logistic Regression Classifier</h3>
+
+<b>Years Correctly Predicted: 2</b>
+
+Out of 11 years, the embedding model predicted the Best Picture winner correctly in 2 years (18% accuracy). This model uses SentenceTransformers’ all-MiniLM-L12-v2 to generate semantic vector representations of individual Letterboxd reviews. These vectors capture deeper contextual meaning than simple word counts, allowing the model to better identify sentiment and themes across reviews. The model performs better than the simple Bag-of-Words model but still only predicts 2 correctly. This suggests that semantic embeddings may better reflect the nuanced language of film criticism, but further improvements such as ensemble strategies may be necessary to boost accuracy.
+
 ---
 
 <h2 align="center"> Discussion </h2>
+The Gradient Boosting model performed the best. Out of the 11 years of Oscar ceremonies studied, the model correctly predicted 3 of the 11 winners and 7 out of 11 as the top three most probable to win. We believe this is due to XYZ
 
-Interestingly, all of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. 
+
+Interestingly, 4 out of 5 of our models predicted the Revenant to win the 2016 Academy Award for Best Picture, even though Spotlight was the true winner. There are no other instances of each of the models consistently choosing a wrong winner like 2016.
 
 ---
 
@@ -170,18 +199,45 @@ Interestingly, all of our models predicted the Revenant to win the 2016 Academy 
 
 **The required Python packages are:**
 - **pandas** – for data manipulation and analysis  
+- **numpy** – for numerical computations  
 - **requests** – for making HTTP requests to fetch web pages  
-- **beautifulsoup** – for parsing HTML and extracting data from web pages  
-- **scikit-learn** – for machine learning models and data preprocessing
-- **langdetect** - for identifying the language of film reviews
-- **swifter** - for efficiently applying functions to a pandas dataframe
-- **tqdm** - for tracking the progress of any number of processes
+- **beautifulsoup4** – for parsing HTML and extracting data from web pages  
+- **scikit-learn** – for modeling and data preprocessing  
+- **nltk** – for natural language processing tasks like tokenization and stop word removal  
+- **sentence-transformers** – for generating semantic embeddings from text reviews  
+- **matplotlib** – for creating visualizations  
+- **langdetect** – for identifying the language of film reviews  
+- **swifter** – for efficiently applying functions to a pandas DataFrame  
+- **tqdm** – for tracking the progress of any number of processes  
+- **re** – for working with regular expressions and text cleaning  
+- **os** – for interacting with the operating system and handling file paths  
+- **heapq** – for efficient heap queue operations  
+- **unicodedata** – for normalizing and cleaning Unicode text  
+- **string** – for string constants and text processing utilities  
+- **datetime** – for handling and formatting date and time information  
+- **pathlib** – for working with and navigating file system paths  
+- **collections** – for specialized data structures like defaultdict  
+- **csv** – for reading and writing CSV files  
+- **ftfy** – for fixing Unicode errors and messy text in scraped reviews  
+- **threading** – for multi-threaded execution  
+- **concurrent.futures** – for parallelizing tasks across multiple threads  
+- **urllib.parse** – for parsing and manipulating URLs
 
 These can be installed using pip (or pip3):  
 
 ```bash
 pip install pandas requests beautifulsoup4 scikit-learn langdetect swifter tqdm
 ```
+
+**Additional setup:**  
+To use `nltk`, you'll also need to download the relevant datasets:
+
+```python
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+```
+
 
 ### Running the Models
 

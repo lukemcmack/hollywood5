@@ -7,8 +7,9 @@ import csv
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 BATCH_SIZE = 1
-OUTPUT_FILE = "data/film_reviews_all_ratings.csv"
-INPUT_CSV = "data/scraping_data_splits/LetterBox_URL_2012_2014.csv"
+MAX_WORKERS = 10
+OUTPUT_FILE = os.path.join("data", "film_reviews_all_ratings_test.csv")
+INPUT_CSV = os.path.join("data", "LetterBox_URL.csv")
 
 
 def parse_rating(rating_text):
@@ -67,7 +68,7 @@ def scrape_film_reviews(film_info):
 
     for rating in rating_values:
 
-        for page in range(1, 257):  # Pages 1-256
+        for page in range(1, 257):  # Pages 1-256, lboxd cuts off reviews after page 256
             url = f"{base_url}/reviews/rated/{rating}/by/added-earliest/page/{page}/"
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -80,7 +81,7 @@ def scrape_film_reviews(film_info):
             soup = BeautifulSoup(response.text, "html.parser")
             review_elements = soup.find_all(
                 "li", class_="film-detail"
-            )  # CORRECTED SELECTOR
+            )
 
             if not review_elements:
                 break
@@ -162,7 +163,7 @@ if __name__ == "__main__":
     total_reviews = 0
     batch_reviews = []
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_film = {
             executor.submit(scrape_film_reviews, film_info): film_info
             for film_info in film_info_list

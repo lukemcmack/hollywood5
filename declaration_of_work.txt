@@ -4,6 +4,6 @@ Matias Ibarburu:
 
 Luke McDonald: Wrote code for scraping film reviews, wrote code for testing URLs, wrote starter code for test train split approach, wrote code for gradient boosting, contributed to README, cleaned scraping files
 
-Danny Urrutia: 
+Danny Urrutia: Wrote code for naive bayes model, helped with dataset creation for scraping oscar nominees per year, wrote code for plotted graphs of predicted vs actual graphs of nominee winners, contributed to README
 
 Jisoo Yoo: Wrote code for scraping film metadata from Letterboxd.com, wrote code for combining data sets with reviews and metadata into one file, filtering both by language and time period, formatted code using black, contributed to the README

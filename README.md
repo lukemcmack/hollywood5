@@ -137,6 +137,11 @@ Another model choice was removing certain stop words. We used the default englis
 
 This model implements SentenceTransformer's FINISH WRITEUP
 
+<h3>Neural Network</h3>
+
+This model implements a Neural 
+
+
 
 Future extensions will include experiments with:
 - TF-IDF vs. word embeddings

@@ -2,7 +2,7 @@ Orlando Di Leo:
 
 Matias Ibarburu: 
 
-Luke McDonald: 
+Luke McDonald: Wrote code for scarping film reviews, wrote code for testing URLs, wrote starter code for test train split approach, wrote code for gradient boosting, contributed to README, cleaned scraping files
 
 Danny Urrutia: 
 
